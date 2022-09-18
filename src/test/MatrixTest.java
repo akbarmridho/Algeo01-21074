@@ -280,8 +280,8 @@ public class MatrixTest {
         double[][] matrixAContent = {{1, 1, 1, -1}, {1, 1, -1, 1}, {1, -1, 1, 1}, {-1, 1, 1, 1}};
         double[][] matrixInverseContent = {{0.25, 0.25, 0.25, -0.25}, {0.25, 0.25, -0.25, 0.25}, {0.25, -0.25, 0.25, 0.25}, {-0.25, 0.25, 0.25, 0.25}};
 
-        Matrix matrixA = new Matrix(3, 3, matrixAContent);
-        Matrix matrixInverse = new Matrix(3, 3, matrixInverseContent);
+        Matrix matrixA = new Matrix(4, 4, matrixAContent);
+        Matrix matrixInverse = new Matrix(4, 4, matrixInverseContent);
 
         try {
             Matrix result = matrixA.getInverse();
