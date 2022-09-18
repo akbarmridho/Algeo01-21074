@@ -14,7 +14,7 @@ public class Matrix {
      * banyaknya kolom
      * isi konten
      */
-    Matrix(int row, int col, double[][] contents) {
+    public Matrix(int row, int col, double[][] contents) {
         this.mat = new double[row][col];
         this.row = row;
         this.col = col;
@@ -239,11 +239,12 @@ public class Matrix {
         boolean equal = (this.col == other.col) && (this.row == other.row);
         //size A != size B -> not equal
         int i = 0;
-        int j = 0; //index
 
         //compare each element
         while (equal && (i < this.row)) {
-            while (equal && (j < this.row)) {
+            int j = 0; //index
+
+            while (equal && (j < this.col)) {
                 equal = this.mat[i][j] == other.mat[i][j]; // Aij != Bij -> stop search
                 j++;
             }
