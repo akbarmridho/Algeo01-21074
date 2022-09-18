@@ -1,4 +1,4 @@
-package regression;
+package main.regression;
 
 public class MultipleLinear {
 

@@ -1,4 +1,4 @@
-package matrix;
+package main.matrix;
 
 public class MatrixAugmented {
     protected Matrix matOriginal;

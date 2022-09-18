@@ -1,4 +1,4 @@
-package matrix;
+package main.matrix;
 
 public class MatrixSquare extends Matrix {
     MatrixSquare(int size, double[][] contents) {

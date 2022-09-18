@@ -1,4 +1,4 @@
-package SPL.errors;
+package main.SPL.errors;
 
 public class NoSolutionException extends Exception {
     NoSolutionException(String errorMessage) {

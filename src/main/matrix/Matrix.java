@@ -1,4 +1,4 @@
-package matrix;
+package main.matrix;
 
 public class Matrix {
     protected double[][] mat;
@@ -104,7 +104,7 @@ public class Matrix {
         //Declaration
         Matrix result = new Matrix(this.row, this.col);
 
-        //add matrix elements
+        //add main.matrix elements
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 result.mat[i][j] = this.mat[i][j] + other.mat[i][j];
@@ -124,7 +124,7 @@ public class Matrix {
         //Declaration
         Matrix result = new Matrix(this.row, this.col);
 
-        //sub matrix elements
+        //sub main.matrix elements
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 result.mat[i][j] = this.mat[i][j] - other.mat[i][j];
@@ -144,7 +144,7 @@ public class Matrix {
         //Declaration
         Matrix result = new Matrix(this.row, this.col);
 
-        //add matrix elements with constant
+        //add main.matrix elements with constant
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 result.mat[i][j] = this.mat[i][j] + val;
