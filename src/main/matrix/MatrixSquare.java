@@ -6,6 +6,36 @@ public class MatrixSquare extends Matrix {
     }
 
     /*
+     * Memperoleh entri minor dari suatu matriks dengan baris dan kolom entri sebagai parameter 
+     * prekondisi: minimal matriks 2x2
+     */
+    public MatrixSquare getMinor(int entryRow, int entryCol) {
+        // pengisian nilai-nilai elemen dari entri minor pada array matOrder
+        int matOrder = this.mat.length;
+        double[][] minorVal = new double[matOrder-1][matOrder-1];
+        int k, l;
+        k=0;
+        for (int i = 0; i < matOrder; i++) {
+            if (i==entryRow) {
+                continue;
+            } else {
+                l=0;
+                for (int j = 0; j < matOrder; j++) {
+                    if (j!=entryCol) {
+                        minorVal[k][l] = this.mat[i][j];
+                        l++;
+                    }
+                }
+                k++;    
+            }
+            
+        }
+        // pembuatan MatrixSquare minor 
+        MatrixSquare minor = new MatrixSquare(matOrder - 1, minorVal);
+        return minor;
+    }
+
+    /*
      * Menghitung determinan suatu matriks dengan metode minor-kofaktor
      * Fungsi ini fungsi rekursif
      */
@@ -55,25 +85,28 @@ public class MatrixSquare extends Matrix {
                 return det;
             }
             // jika tidak, lanjutkan perhitungan determinan
-            else{   
+            else{
+                double sign;
                 // percabangan: menentukan untuk menggunakan baris atau kolom dengan nol terbanyak
                 if (zeroCount[0][rowMaxIdx] >= zeroCount[1][colMaxIdx]){    // baris "maxima" memiliki lebih banyak '0' daripada kolom "maxima"
+                    sign = Math.pow(-1, rowMaxIdx);
                     for (int j=0; j<matrixOrder; j++){
                         if (this.mat[rowMaxIdx][j]==0) {    // tidak memproses cofactor apabila elemen pada baris bernilai 0
                             continue;
                         }
                         else{
-                            det += this.mat[rowMaxIdx][j] * this.getCofactor(rowMaxIdx, j);
+                            det += this.mat[rowMaxIdx][j] * sign * (this.getMinor(rowMaxIdx, j)).getDeterminant();
                         }
                     }
                 }
                 else{   // kolom "maxima" memiliki lebih banyak nilai '0'
+                    sign = Math.pow(-1, colMaxIdx);
                     for (int i=0; i<matrixOrder; i++){
                         if (this.mat[i][colMaxIdx]==0) {    // tidak memproses cofactor apabila elemen pada kolom bernilai 0
                             continue;
                         }
                         else{
-                            det += this.mat[i][colMaxIdx] * this.getCofactor(i, colMaxIdx);
+                            det += this.mat[i][colMaxIdx] * sign * (this.getMinor(i, colMaxIdx)).getDeterminant();
                         }
                     }
                 }
@@ -83,36 +116,14 @@ public class MatrixSquare extends Matrix {
         }
     }
 
-    /*
-     * Memperoleh nilai kofaktor dari suatu matriks 
-     * prekondisi: minimal matriks 2x2
-     */
-    public double getCofactor(int entryRow, int entryCol) {
-        // pengisian nilai-nilai elemen dari entri minor pada array matOrder
-        int matOrder = this.mat.length;
-        double[][] minorVal = new double[matOrder-1][matOrder-1];
-        int k, l;
-        k=0;
-        for (int i = 0; i < matOrder; i++) {
-            if (i==entryRow) {
-                continue;
-            } else {
-                l=0;
-                for (int j = 0; j < matOrder; j++) {
-                    if (j!=entryCol) {
-                        minorVal[k][l] = this.mat[i][j];
-                        l++;
-                    }
-                }
-                k++;    
-            }
-            
-        }
-        // pembuatan MatrixSquare minor untuk pemrosesan
-        MatrixSquare minor = new MatrixSquare(matOrder - 1, minorVal);
+    
 
-        // perhitungan dan pengembalian kofaktor
-        return (Math.pow(-1, entryRow+entryCol) * minor.getDeterminant());
+    /**
+     * menghitung kofaktor matriks dari posisi entri pada matriks
+     */
+    public double getCofactor(int entryRow, int entryCol){
+        double sign = Math.pow(-1, entryRow+entryCol);
+        return (sign * (this.getMinor(entryRow, entryCol)).getDeterminant());
     }
 
     /*
