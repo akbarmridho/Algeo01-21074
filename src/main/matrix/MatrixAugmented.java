@@ -4,11 +4,46 @@ public class MatrixAugmented {
     protected Matrix matOriginal;
     protected Matrix matAugmentation;
 
-    MatrixAugmented(Matrix original, Matrix augmentation) {
+    public MatrixAugmented(Matrix original, Matrix augmentation) {
         this.matOriginal = original;
         this.matAugmentation = augmentation;
     }
 
+    public Matrix getOriginal() {
+        return this.matOriginal;
+    }
+
+    public Matrix getAugmentation() {
+        return this.matAugmentation;
+    }
+
+    public int getRowCount() {
+        return this.matOriginal.getRowCount();
+    }
+
+    public int getColCount() {
+        return this.matAugmentation.getColumnCount() + this.matOriginal.getColumnCount();
+    }
+
+    public int getColMaxIndex(int col, int fromRow, int toRow)
+    {
+        if (toRow > fromRow)
+        {
+            return -1;
+        }
+
+        int max = fromRow;
+
+        for (int i = fromRow+1; i<=toRow;i++)
+        {
+            if(this.matOriginal.mat[i][col] > this.matOriginal.mat[max][col])
+            {
+                max = i;
+            }
+        }
+
+        return max;
+    }
     /*
      * Menukar dua baris
      */

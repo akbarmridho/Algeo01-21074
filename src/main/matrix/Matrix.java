@@ -3,6 +3,8 @@ package main.matrix;
 import main.matrix.errors.NotMatrixSquareException;
 import main.matrix.errors.ZeroDeterminantException;
 
+import java.util.Arrays;
+
 public class Matrix {
     protected double[][] mat;
     protected int row;
@@ -169,7 +171,7 @@ public class Matrix {
     public void swapRow(int row1, int row2) {
         //Declaration
         double[] temp; //temporary storage register for swap
-        
+
         //swap
         temp = this.mat[row1];
         this.mat[row1] = this.mat[row2];
@@ -213,6 +215,49 @@ public class Matrix {
         //return
     }
 
+    public Matrix deleteRows(Integer[] rows) {
+        int newRow = this.row - rows.length;
+        double[][] contents = new double[newRow][this.col];
+
+        int rowCount = 0;
+
+        for (int i = 0; i < newRow; i++) {
+            int finalI = i;
+            if (Arrays.stream(rows).anyMatch(x -> x == finalI)) {
+                continue;
+            }
+
+            for (int j = 0; j < this.col; j++) {
+                contents[rowCount][j] = this.mat[i][j];
+            }
+
+            rowCount++;
+        }
+
+        return new Matrix(newRow, this.col, contents);
+    }
+
+    public Matrix deleteCols(Integer[] cols) {
+        int newCol = this.col - cols.length;
+        double[][] contents = new double[this.row][newCol];
+
+        for (int i = 0; i < this.row; i++) {
+
+            int colCount = 0;
+
+            for (int j = 0; j < this.col; j++) {
+                int finalJ = j;
+                if (!Arrays.stream(cols).anyMatch(x -> x == finalJ)) {
+                    contents[i][colCount] = this.mat[i][j];
+                    colCount++;
+                }
+            }
+
+        }
+
+        return new Matrix(this.row, newCol, contents);
+    }
+
     /*
      * Melakukan transpos matriks
      * Mengembalikan hasil transpose matriks
@@ -229,7 +274,7 @@ public class Matrix {
                 //Tij = Aji
             }
         }
-        
+
         //return
         return result;
     }
@@ -262,16 +307,16 @@ public class Matrix {
     public Matrix getMinor(int entryRow, int entryCol) {
         // pengisian nilai-nilai elemen dari entri minor pada array matOrder
         int matOrder = this.mat.length;
-        double[][] minorVal = new double[matOrder-1][matOrder-1];
+        double[][] minorVal = new double[matOrder - 1][matOrder - 1];
         int k, l;
-        k=0;
+        k = 0;
         for (int i = 0; i < matOrder; i++) {
-            if (i==entryRow) {
+            if (i == entryRow) {
                 continue;
             } else {
-                l=0;
+                l = 0;
                 for (int j = 0; j < matOrder; j++) {
-                    if (j!=entryCol) {
+                    if (j != entryCol) {
                         minorVal[k][l] = this.mat[i][j];
                         l++;
                     }
@@ -281,28 +326,25 @@ public class Matrix {
 
         }
         // pembuatan Matrix minor
-        Matrix minor = new Matrix(matOrder - 1,matOrder-1, minorVal);
+        Matrix minor = new Matrix(matOrder - 1, matOrder - 1, minorVal);
         return minor;
     }
 
     public double getDeterminant() throws NotMatrixSquareException {
-        if(!this.isSquare())
-        {
+        if (!this.isSquare()) {
             throw new NotMatrixSquareException("Matriks bukan persegi sehingga tidak bisa diperoleh determinan");
         }
         // percabangan : cek ukuran atau orde matriks persegi
         int matrixOrder = this.mat.length;
         if (matrixOrder == 1) {
             return (this.mat[0][0]);
-        }
-        else if (matrixOrder == 2){
-            return (this.mat[0][0]*this.mat[1][1] - this.mat[0][1]*this.mat[1][0]);
-        }
-        else {
+        } else if (matrixOrder == 2) {
+            return (this.mat[0][0] * this.mat[1][1] - this.mat[0][1] * this.mat[1][0]);
+        } else {
             double det = 0;
             int sign = 1;
             for (int j = 0; j < matrixOrder; j++) {
-                det += sign * this.mat[0][j] * (this.getMinor(0,j)).getDeterminant();
+                det += sign * this.mat[0][j] * (this.getMinor(0, j)).getDeterminant();
                 sign = -sign;
             }
             return det;
@@ -383,12 +425,11 @@ public class Matrix {
      * prekondisi: minimal matriks 2x2
      */
     public double getCofactor(int entryRow, int entryCol) throws NotMatrixSquareException {
-        if(!this.isSquare())
-        {
+        if (!this.isSquare()) {
             throw new NotMatrixSquareException("Matriks bukan persegi sehingga tidak bisa diperoleh determinan");
         }
 
-        double sign = Math.pow(-1, entryRow+entryCol);
+        double sign = Math.pow(-1, entryRow + entryCol);
         return (sign * (this.getMinor(entryRow, entryCol)).getDeterminant());
     }
 
@@ -397,8 +438,7 @@ public class Matrix {
      * Menggunakan metode minor-kofaktor, lalu di-transpose
      */
     public Matrix getAdjoin() throws NotMatrixSquareException {
-        if(!this.isSquare())
-        {
+        if (!this.isSquare()) {
             throw new NotMatrixSquareException("Matriks bukan persegi sehingga tidak bisa diperoleh adjoin");
         }
 
@@ -410,7 +450,7 @@ public class Matrix {
             }
         }
         Matrix cofactorsMat = new Matrix(order, order, cofactorsVal);
-        Matrix adj =  cofactorsMat.transpose();
+        Matrix adj = cofactorsMat.transpose();
         return adj;
     }
 
@@ -419,19 +459,17 @@ public class Matrix {
      * Prekondisi: determinan tidak 0
      */
     public Matrix getInverse() throws NotMatrixSquareException, ZeroDeterminantException {
-        if(!this.isSquare())
-        {
+        if (!this.isSquare()) {
             throw new NotMatrixSquareException("Matriks bukan persegi sehingga tidak bisa diperoleh invers");
         }
 
         double det = this.getDeterminant();
 
-        if (det == 0)
-        {
+        if (det == 0) {
             throw new ZeroDeterminantException("Matriks memiliki determinan nol sehingga tidak bisa diperoleh invers");
         }
         Matrix adj = this.getAdjoin();
-        Matrix inv =  adj.multiplyCoef(1/det);
+        Matrix inv = adj.multiplyCoef(1 / det);
         return inv;
     }
 }
