@@ -29,7 +29,7 @@ public class Transformers {
             }
         }
 
-        if (equation.getColumnCount() - maskedIdx.size() < matrix.getAugmentation().getRowCount()) {
+        if (equation.getColumnCount() - maskedIdx.size() > matrix.getAugmentation().getRowCount()) {
             throw new InfinitySolutionException("Terdapat tak-hingga banyaknya solusi");
         }
 

@@ -10,6 +10,8 @@ public class Matrix {
     protected int row;
     protected int col;
 
+    static final double tolerance = 0.0000001;
+
     /*
      * Konstruktor:
      * banyaknya baris
@@ -33,6 +35,17 @@ public class Matrix {
         //source: docs.oracle.com/javase/specs/jls/se7/html/jls-4.html#jls-4.12.5
         this.row = row;
         this.col = col;
+    }
+
+    public Matrix copy()
+    {
+        double[][] contents = new double[this.row][this.col];
+
+        for (int i = 0; i < this.row; i++) {
+            System.arraycopy(this.mat[i], 0, contents[i], 0, this.col);
+        }
+
+        return new Matrix(this.row, this.col, contents);
     }
 
     /*
@@ -215,7 +228,7 @@ public class Matrix {
         //return
     }
 
-    public Matrix deleteRows(Integer[] rows) {
+    public void deleteRows(Integer[] rows) {
         int newRow = this.row - rows.length;
         double[][] contents = new double[newRow][this.col];
 
@@ -234,10 +247,11 @@ public class Matrix {
             rowCount++;
         }
 
-        return new Matrix(newRow, this.col, contents);
+        this.mat = contents;
+        this.row = newRow;
     }
 
-    public Matrix deleteCols(Integer[] cols) {
+    public void deleteCols(Integer[] cols) {
         int newCol = this.col - cols.length;
         double[][] contents = new double[this.row][newCol];
 
@@ -255,7 +269,8 @@ public class Matrix {
 
         }
 
-        return new Matrix(this.row, newCol, contents);
+        this.mat = contents;
+        this.col = newCol;
     }
 
     /*
@@ -290,7 +305,7 @@ public class Matrix {
             int j = 0; //index
 
             while (equal && (j < this.col)) {
-                equal = this.mat[i][j] == other.mat[i][j]; // Aij != Bij -> stop search
+                equal = Math.abs(this.mat[i][j] - other.mat[i][j]) < tolerance ; // Aij != Bij -> stop search
                 j++;
             }
             i++;

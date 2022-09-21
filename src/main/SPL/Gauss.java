@@ -7,14 +7,15 @@ import main.matrix.MatrixAugmented;
 import main.matrix.errors.NotMatrixSquareException;
 
 public class Gauss {
-    public static double[] solve(MatrixAugmented matrix) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
+    public static double[] solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
+        MatrixAugmented matrix = matrixCpy.copy();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
         operation(matrix);
 
         // selesaikan solusi SPL dari matriks eselon
         for (int i = matrix.getRowCount() - 1; i >= 0; i--) {
             for (int j = 0; j < i; j++) {
-                matrix.addRow(j, i, matrix.getOriginal().getMatrix()[j][i]);
+                matrix.addRow(j, i, -1 * matrix.getOriginal().getMatrix()[j][i]);
             }
         }
 

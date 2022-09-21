@@ -9,6 +9,11 @@ public class MatrixAugmented {
         this.matAugmentation = augmentation;
     }
 
+    public MatrixAugmented copy()
+    {
+        return new MatrixAugmented(this.matOriginal.copy(), this.matAugmentation.copy());
+    }
+
     public Matrix getOriginal() {
         return this.matOriginal;
     }
