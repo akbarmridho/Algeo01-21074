@@ -29,7 +29,7 @@ public class Matrix {
     }
 
     //Empty constructor
-    Matrix(int row, int col) {
+    public Matrix(int row, int col) {
         this.mat = new double[row][col];
         //a default value of 0.0d for array of double is guranteed
         //source: docs.oracle.com/javase/specs/jls/se7/html/jls-4.html#jls-4.12.5

@@ -60,10 +60,6 @@ public class Transformers {
 
     // mengubah matrix yang terdiri dari satu kolom menjadi sebuah array satu dimensi
     public static double[] singleColMatToArr(Matrix input){
-        double[] result = new double[input.getRowCount()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = input.getMatrix()[i][0];
-        }
-        return result;
+        return (input.transpose()).getMatrix()[0];
     }
 }
