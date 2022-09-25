@@ -10,7 +10,7 @@ public class Gauss {
     public static double[] solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
-        operation(matrix);
+        operation(matrix, false);
 
         // selesaikan solusi SPL dari matriks eselon
         for (int i = matrix.getRowCount() - 1; i >= 0; i--) {
@@ -26,11 +26,14 @@ public class Gauss {
     /*
      * lakukan operasi gauss sehingga terbentuk matriks eselon
      */
-    public static void operation(MatrixAugmented matrix) throws NotMatrixSquareException, NoSolutionException {
-        double determinant = matrix.getOriginal().getDeterminant();
+    public static void operation(MatrixAugmented matrix, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException {
+        if (!skipDeterminant)
+        {
+            double determinant = matrix.getOriginal().getDeterminant();
 
-        if (determinant == 0) {
-            throw new NoSolutionException("Tidak terdapat solusi SPL karena determinan nol");
+            if (determinant == 0) {
+                throw new NoSolutionException("Tidak terdapat solusi SPL karena determinan nol");
+            }
         }
 
         // Sort matrix agar kolom ke-n pada baris ke-n merupakan nilai terbesar di antara kolom ke-n pada semua baris

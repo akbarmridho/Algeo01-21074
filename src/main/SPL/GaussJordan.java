@@ -11,14 +11,14 @@ public class GaussJordan {
         MatrixAugmented matrix = matrixCpy.copy();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
 
-        operation(matrix);
+        operation(matrix, false);
 
         // buat array hasil
         return Transformers.fillResultWithZero(matrix.getAugmentation().transpose().getMatrix()[0], removedIdx);
     }
 
-    public static void operation(MatrixAugmented matrix) throws NotMatrixSquareException, NoSolutionException {
-        Gauss.operation(matrix);
+    public static void operation(MatrixAugmented matrix, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException {
+        Gauss.operation(matrix, skipDeterminant);
 
         // lakukan operasi jordan (setelah operasi gauss) untuk membentuk solusi
         for (int i = matrix.getRowCount() - 1; i >= 0; i--) {
