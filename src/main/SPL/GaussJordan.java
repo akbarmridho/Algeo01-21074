@@ -10,6 +10,14 @@ public class GaussJordan {
     public static double[] solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
+
+        operation(matrix);
+
+        // buat array hasil
+        return Transformers.fillResultWithZero(matrix.getAugmentation().transpose().getMatrix()[0], removedIdx);
+    }
+
+    public static void operation(MatrixAugmented matrix) throws NotMatrixSquareException, NoSolutionException {
         Gauss.operation(matrix);
 
         // lakukan operasi jordan (setelah operasi gauss) untuk membentuk solusi
@@ -18,8 +26,5 @@ public class GaussJordan {
                 matrix.addRow(j, i, -1 * matrix.getOriginal().getMatrix()[j][i]);
             }
         }
-
-        // buat array hasil
-        return Transformers.fillResultWithZero(matrix.getAugmentation().transpose().getMatrix()[0], removedIdx);
     }
 }

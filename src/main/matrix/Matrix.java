@@ -10,21 +10,19 @@ public class Matrix {
     protected int row;
     protected int col;
 
-    static final double tolerance = 0.0000001;
+    static final double tolerance = Math.pow(2, -23);
 
     /*
      * Konstruktor:
-     * banyaknya baris
-     * banyaknya kolom
-     * isi konten
+     * isi konten berbentuk array of array of double
      */
-    public Matrix(int row, int col, double[][] contents) {
-        this.mat = new double[row][col];
-        this.row = row;
-        this.col = col;
+    public Matrix(double[][] contents) {
+        this.row = contents.length;
+        this.col = contents[0].length;
+        this.mat = new double[this.row][this.col];
 
-        for (int i = 0; i < row; i++) {
-            System.arraycopy(contents[i], 0, this.mat[i], 0, col);
+        for (int i = 0; i < this.row; i++) {
+            System.arraycopy(contents[i], 0, this.mat[i], 0, this.col);
         }
     }
 
@@ -37,15 +35,12 @@ public class Matrix {
         this.col = col;
     }
 
-    public Matrix copy()
-    {
-        double[][] contents = new double[this.row][this.col];
-
-        for (int i = 0; i < this.row; i++) {
-            System.arraycopy(this.mat[i], 0, contents[i], 0, this.col);
-        }
-
-        return new Matrix(this.row, this.col, contents);
+    /*
+     * Membuat salinan class matrix baru
+     * isi konten tidak perlu disalin karena konstruktor otomatis menyalin parameter ke dalam array baru
+     */
+    public Matrix copy() {
+        return new Matrix(this.mat);
     }
 
     /*
@@ -228,6 +223,10 @@ public class Matrix {
         //return
     }
 
+    /*
+     * Menghapus banyak baris sekaligus
+     * Parameter adalah array of index baris yang ingin dihapus
+     */
     public void deleteRows(Integer[] rows) {
         int newRow = this.row - rows.length;
         double[][] contents = new double[newRow][this.col];
@@ -240,9 +239,7 @@ public class Matrix {
                 continue;
             }
 
-            for (int j = 0; j < this.col; j++) {
-                contents[rowCount][j] = this.mat[i][j];
-            }
+            if (this.col >= 0) System.arraycopy(this.mat[i], 0, contents[rowCount], 0, this.col);
 
             rowCount++;
         }
@@ -251,6 +248,10 @@ public class Matrix {
         this.row = newRow;
     }
 
+    /*
+     * Menghapus banyak kolom sekaligus
+     * Parameter adalah array of index kolom yang ingin dihapus
+     */
     public void deleteCols(Integer[] cols) {
         int newCol = this.col - cols.length;
         double[][] contents = new double[this.row][newCol];
@@ -261,7 +262,7 @@ public class Matrix {
 
             for (int j = 0; j < this.col; j++) {
                 int finalJ = j;
-                if (!Arrays.stream(cols).anyMatch(x -> x == finalJ)) {
+                if (Arrays.stream(cols).noneMatch(x -> x == finalJ)) {
                     contents[i][colCount] = this.mat[i][j];
                     colCount++;
                 }
@@ -294,6 +295,10 @@ public class Matrix {
         return result;
     }
 
+    /*
+     * Memeriksa apakah dua buah matriks memiliki konten yang sama
+     * (dalam batas toleransi 2^-23 untuk setiap elemennya)
+     */
     public boolean isEqual(Matrix other) {
         //Declaration
         boolean equal = (this.col == other.col) && (this.row == other.row);
@@ -305,7 +310,7 @@ public class Matrix {
             int j = 0; //index
 
             while (equal && (j < this.col)) {
-                equal = Math.abs(this.mat[i][j] - other.mat[i][j]) < tolerance ; // Aij != Bij -> stop search
+                equal = Math.abs(this.mat[i][j] - other.mat[i][j]) < tolerance; // Aij != Bij -> stop search
                 j++;
             }
             i++;
@@ -326,9 +331,7 @@ public class Matrix {
         int k, l;
         k = 0;
         for (int i = 0; i < matOrder; i++) {
-            if (i == entryRow) {
-                continue;
-            } else {
+            if (i != entryRow) {
                 l = 0;
                 for (int j = 0; j < matOrder; j++) {
                     if (j != entryCol) {
@@ -341,10 +344,12 @@ public class Matrix {
 
         }
         // pembuatan Matrix minor
-        Matrix minor = new Matrix(matOrder - 1, matOrder - 1, minorVal);
-        return minor;
+        return new Matrix(minorVal);
     }
 
+    /*
+     * Mencari nilai determinan suatu matriks menggunakan metode minor-kofaktor
+     */
     public double getDeterminant() throws NotMatrixSquareException {
         if (!this.isSquare()) {
             throw new NotMatrixSquareException("Matriks bukan persegi sehingga tidak bisa diperoleh determinan");
@@ -356,84 +361,65 @@ public class Matrix {
         } else if (matrixOrder == 2) {
             return (this.mat[0][0] * this.mat[1][1] - this.mat[0][1] * this.mat[1][0]);
         } else {
-            double det = 0;
-            int sign = 1;
-            for (int j = 0; j < matrixOrder; j++) {
-                det += sign * this.mat[0][j] * (this.getMinor(0, j)).getDeterminant();
-                sign = -sign;
+            // lakukan pencarian baris dengan nol terbanyak
+            int rowIdx = 0;
+            int rowZeroCount = 0;
+
+            for (int i = 0; i < this.getRowCount(); i++) {
+                int currentZeroCount = 0;
+                for (int j = 0; j < this.getColumnCount(); j++) {
+                    if (this.mat[i][j] == 0) {
+                        currentZeroCount++;
+                    }
+                }
+
+                if (rowZeroCount < currentZeroCount) {
+                    rowIdx = i;
+                    rowZeroCount = currentZeroCount;
+                }
             }
+
+            // lakukan pencarian kolom dengan nol terbanyak
+            int colIdx = 0;
+            int colZeroCount = 0;
+
+            for (int j = 0; j < this.getColumnCount(); j++) {
+                int currentZeroCount = 0;
+                for (int i = 0; i < this.getRowCount(); i++) {
+                    if (this.mat[i][j] == 0) {
+                        currentZeroCount++;
+                    }
+                }
+
+                if (colZeroCount < currentZeroCount) {
+                    colIdx = j;
+                    colZeroCount = currentZeroCount;
+                }
+            }
+
+            double det = 0;
+
+            // pilih minor kofaktor dengan nol terbanyak untuk mengurangi banyaknya perhitungan
+            // jika nol terbanyak berada pada suatu baris
+            if (rowZeroCount > colZeroCount) {
+                for (int j = 0; j < matrixOrder; j++) {
+                    if (this.mat[rowIdx][j] != 0) {
+                        det += Math.pow(-1, rowIdx + j) * this.mat[rowIdx][j] * this.getMinor(rowIdx, j).getDeterminant();
+                    }
+                }
+
+            } else {
+                // jika nol terbanyak berada pada suatu kolom
+                for (int i = 0; i < matrixOrder; i++) {
+                    if (this.mat[i][colIdx] != 0) {
+                        det += Math.pow(-1, colIdx + i) * this.mat[i][colIdx] * this.getMinor(i, colIdx).getDeterminant();
+                    }
+                }
+            }
+
             return det;
         }
     }
-// EXPERIMENTAL : pencarian nol terbanyak pada baris/kolom untuk perhitungan determinan
-//        else{
-//
-//            // mencari baris atau kolom dengan nol terbanyak
-//            int[][] zeroCount = new int[2][matrixOrder];
-//            int colZeroes, rowZeroes;
-//            for (int i=0; i<matrixOrder; i++){
-//                colZeroes=0;
-//                rowZeroes=0;
-//                for (int j=0; j<matrixOrder; j++){
-//                    if (this.mat[i][j]==0){
-//                        rowZeroes++;
-//                    }
-//                    if (this.mat[j][i]==0){
-//                        colZeroes++;
-//                    }
-//                }
-//                zeroCount[0][i]=rowZeroes;
-//                zeroCount[1][i]=colZeroes;
-//            }
-//            // mencari maxima (indeks baris atau kolom dengan '0' terbanyak)
-//            int rowMaxIdx=zeroCount[0][0];
-//            int colMaxIdx=zeroCount[1][0];
-//            for (int i=0; i<matrixOrder; i++) {
-//                if (zeroCount[0][i]>rowMaxIdx){
-//                    rowMaxIdx = i;
-//                }
-//                if (zeroCount[1][i]>colMaxIdx){
-//                    colMaxIdx = i;
-//                }
-//            }
-//
-//            // percabangan : cek apakah ada baris atau kolom yang seluruh elemennya bernilai nol
-//            // jika ada, determinan = 0
-//            double det=0;
-//            if (zeroCount[0][rowMaxIdx] == matrixOrder || zeroCount[1][colMaxIdx] == matrixOrder){
-//                return det;
-//            }
-//            // jika tidak, lanjutkan perhitungan determinan
-//            else{
-//                double sign;
-//                // percabangan: menentukan untuk menggunakan baris atau kolom dengan nol terbanyak
-//                if (zeroCount[0][rowMaxIdx] >= zeroCount[1][colMaxIdx]){    // baris "maxima" memiliki lebih banyak '0' daripada kolom "maxima"
-//                    sign = Math.pow(-1, rowMaxIdx);
-//                    for (int j=0; j<matrixOrder; j++){
-//                        if (this.mat[rowMaxIdx][j]==0) {    // tidak memproses cofactor apabila elemen pada baris bernilai 0
-//                            continue;
-//                        }
-//                        else{
-//                            det += this.mat[rowMaxIdx][j] * sign * (this.getMinor(rowMaxIdx, j)).getDeterminant();
-//                        }
-//                    }
-//                }
-//                else{   // kolom "maxima" memiliki lebih banyak nilai '0'
-//                    sign = Math.pow(-1, colMaxIdx);
-//                    for (int i=0; i<matrixOrder; i++){
-//                        if (this.mat[i][colMaxIdx]==0) {    // tidak memproses cofactor apabila elemen pada kolom bernilai 0
-//                            continue;
-//                        }
-//                        else{
-//                            det += this.mat[i][colMaxIdx] * sign * (this.getMinor(i, colMaxIdx)).getDeterminant();
-//                        }
-//                    }
-//                }
-//
-//                return det;
-//            }
-//        }
-
 
     /*
      * Memperoleh nilai kofaktor dari suatu matriks
@@ -464,9 +450,8 @@ public class Matrix {
                 cofactorsVal[i][j] = this.getCofactor(i, j);
             }
         }
-        Matrix cofactorsMat = new Matrix(order, order, cofactorsVal);
-        Matrix adj = cofactorsMat.transpose();
-        return adj;
+        Matrix cofactorsMat = new Matrix(cofactorsVal);
+        return cofactorsMat.transpose();
     }
 
     /*
@@ -484,7 +469,41 @@ public class Matrix {
             throw new ZeroDeterminantException("Matriks memiliki determinan nol sehingga tidak bisa diperoleh invers");
         }
         Matrix adj = this.getAdjoin();
-        Matrix inv = adj.multiplyCoef(1 / det);
-        return inv;
+        return adj.multiplyCoef(1 / det);
+    }
+
+    /*
+     * Cari indeks kolom pada range baris dengan nilai maksimum pada kolom tersebut
+     */
+    public int getColMaxIndex(int col, int fromRow, int toRow) {
+        if (toRow <= fromRow) {
+            return -1;
+        }
+
+        int max = fromRow;
+
+        for (int i = fromRow + 1; i <= toRow; i++) {
+            if (this.mat[i][col] > this.mat[max][col]) {
+                max = i;
+            }
+        }
+
+        return max;
+    }
+
+    public static Matrix identity(int size) {
+        double[][] contents = new double[size][size];
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (i == j) {
+                    contents[i][j] = 1;
+                } else {
+                    contents[i][j] = 0;
+                }
+            }
+        }
+
+        return new Matrix(contents);
     }
 }

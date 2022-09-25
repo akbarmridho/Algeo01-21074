@@ -22,8 +22,8 @@ public class GaussJordanTest {
                 {1}, {-2}, {4}, {6}
         };
 
-        Matrix matrixA = new Matrix(4, 4, matrixAContent);
-        Matrix matrixB = new Matrix(4, 1, matrixBContent);
+        Matrix matrixA = new Matrix(matrixAContent);
+        Matrix matrixB = new Matrix(matrixBContent);
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
@@ -47,8 +47,8 @@ public class GaussJordanTest {
                 3.0, 2.0, 1.0
         };
 
-        Matrix matrixA = new Matrix(3, 3, matrixAContent);
-        Matrix matrixB = new Matrix(3, 1, matrixBContent);
+        Matrix matrixA = new Matrix(matrixAContent);
+        Matrix matrixB = new Matrix(matrixBContent);
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
@@ -76,8 +76,8 @@ public class GaussJordanTest {
                 {3}, {6}, {5}, {-1}
         };
 
-        Matrix matrixA = new Matrix(4, 5, matrixAContent);
-        Matrix matrixB = new Matrix(4, 1, matrixBContent);
+        Matrix matrixA = new Matrix(matrixAContent);
+        Matrix matrixB = new Matrix(matrixBContent);
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
@@ -97,8 +97,8 @@ public class GaussJordanTest {
                 {2}, {-1}, {1}
         };
 
-        Matrix matrixA = new Matrix(3, 6, matrixAContent);
-        Matrix matrixB = new Matrix(3, 1, matrixBContent);
+        Matrix matrixA = new Matrix(matrixAContent);
+        Matrix matrixB = new Matrix(matrixBContent);
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
@@ -122,8 +122,8 @@ public class GaussJordanTest {
                 3.0, 2.0, 1.0, 0.0
         };
 
-        Matrix matrixA = new Matrix(3, 4, matrixAContent);
-        Matrix matrixB = new Matrix(3, 1, matrixBContent);
+        Matrix matrixA = new Matrix(matrixAContent);
+        Matrix matrixB = new Matrix(matrixBContent);
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 

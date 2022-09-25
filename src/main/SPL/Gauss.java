@@ -34,9 +34,9 @@ public class Gauss {
         }
 
         // Sort matrix agar kolom ke-n pada baris ke-n merupakan nilai terbesar di antara kolom ke-n pada semua baris
-        for (int i = 0; i < matrix.getOriginal().getColumnCount(); i++) {
+        for (int i = 0; i < matrix.getOriginal().getColumnCount() - 1; i++) {
             int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);
-            if (maxRowIdx != -1) {
+            if (maxRowIdx != -1 && i != maxRowIdx) {
                 matrix.swapRow(i, maxRowIdx);
             }
         }
@@ -45,6 +45,29 @@ public class Gauss {
         for (int i = 0; i < matrix.getRowCount(); i++) {
             // Sebelum baris matriksnya dipasangkan, terlebih dahulu bagi barisnya sehingga kolom ke-n pada baris ke-n
             // bernilai 1
+
+            // terdapat rare case ketika elemen [i,i] merupakan nol akibat dari pengurangan yang dilakukan pada loop
+            // sebelumnya, sehingga kita harus melakukan swapping lagi
+            if (matrix.getOriginal().getMatrix()[i][i] == 0.0)
+            {
+                int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);
+                if (maxRowIdx != -1 && i != maxRowIdx) {
+                    matrix.swapRow(i, maxRowIdx);
+                } else {
+                    // terdapat case juga saat nilai maksimum pada kolom i adalah 0
+                    // mengingat divider tidak boleh nol, akhira kita loop dan swap agar nilai pada kolom [i,i] bernilai
+                    // negatif
+
+                    int searchIdx = i+1;
+                    while(matrix.getOriginal().getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount())
+                    {
+                        searchIdx++;
+                    }
+
+                    matrix.swapRow(i, searchIdx);
+                }
+            }
+
             double divider = matrix.getOriginal().getMatrix()[i][i];
             matrix.multiplyRow(i, 1d / divider);
 

@@ -32,22 +32,7 @@ public class MatrixAugmented {
 
     public int getColMaxIndex(int col, int fromRow, int toRow)
     {
-        if (toRow > fromRow)
-        {
-            return -1;
-        }
-
-        int max = fromRow;
-
-        for (int i = fromRow+1; i<=toRow;i++)
-        {
-            if(this.matOriginal.mat[i][col] > this.matOriginal.mat[max][col])
-            {
-                max = i;
-            }
-        }
-
-        return max;
+        return this.matOriginal.getColMaxIndex(col, fromRow, toRow);
     }
     /*
      * Menukar dua baris
