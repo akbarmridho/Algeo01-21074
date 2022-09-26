@@ -9,6 +9,29 @@ public class MatrixAugmented {
         this.matAugmentation = augmentation;
     }
 
+    /*
+     * Buat matrix augmented dari array of arraf of double
+     * yang menjadi augmentasi adalah kolom paling kanan
+     */
+    public MatrixAugmented(double[][] contents)
+    {
+        double[][] original = new double[contents.length][contents[0].length-1];
+        double[][] augmentation = new double[contents.length][1];
+
+        for (int i = 0; i < contents.length; i++)
+        {
+            for (int j = 0 ; j < contents[i].length-1; j++)
+            {
+                original[i][j] = contents[i][j];
+            }
+
+            augmentation[i][0] = contents[i][contents[i].length-1];
+        }
+
+        this.matOriginal = new Matrix(original);
+        this.matAugmentation = new Matrix(augmentation);
+    }
+
     public MatrixAugmented copy()
     {
         return new MatrixAugmented(this.matOriginal.copy(), this.matAugmentation.copy());
