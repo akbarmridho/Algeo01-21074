@@ -4,6 +4,7 @@ import main.interpolation.Bicubic;
 import main.matrix.Matrix;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 
@@ -33,7 +34,7 @@ public class ImageScaling {
         // interpolasi edge pixel teratas dan terbawah (handle case pixel genap)
         // bila jumlah pixel ganjil, pixel pada posisi ganjil terakhir belum diinterpolasi
         for (int y : new int[]{0, height - 2}) {
-            for (int x = 0; x <= width - 2; x+=2) {
+            for (int x = 0; x <= width - 2; x += 2) {
                 int[][][] subPixels = new int[2][2][4];
 
                 for (int i = 0; i < 2; i++) {
@@ -54,7 +55,7 @@ public class ImageScaling {
 
         // interpolasi edge pixel paling kiri dan kanan (handle case pixel genap)
         // bila jumlah pixel ganjil, pixel pada posisi ganjil terakhir belum diinterpolasi
-        for (int y = 1; y < (height / 2) * 2 - 1; y+=2) {
+        for (int y = 1; y < (height / 2) * 2 - 1; y += 2) {
             for (int x : new int[]{0, (width / 2) * 2 - 2}) {
                 int[][][] subPixels = new int[2][2][4];
 
@@ -76,7 +77,7 @@ public class ImageScaling {
 
         // handle jika terdapat lebar yang ganjil
         if (width % 2 == 1) {
-            for (int y = 0; y < (height / 2) * 2 - 1; y+=2) {
+            for (int y = 0; y < (height / 2) * 2 - 1; y += 2) {
                 int[][][] subPixels = new int[2][2][4];
 
                 subPixels[0][0] = pixels[y][width - 2];
@@ -96,7 +97,7 @@ public class ImageScaling {
 
         // handle jika terdapat tinggi yang ganjil
         if (height % 2 == 1) {
-            for (int x = 0; x < width - 2; x+=2) {
+            for (int x = 0; x < width - 2; x += 2) {
                 int[][][] subPixels = new int[2][2][4];
 
                 subPixels[0][0] = pixels[height - 2][x];
@@ -132,29 +133,36 @@ public class ImageScaling {
             }
         }
 
-
         // interpolate 2x2 pixels menjadi 4x4 pixels dari 4x4 pixels sekitar
         // menggunakan metode bicubic interpolation
         // from y = 1 and x = 2 to y < height/2 and x < width/2
-        for (int y = 1; y < (height / 2) * 2 - 2; y+=2) {
-            for (int x = 1; x < (width / 2) * 2 - 2; x+=2) {
-                int[][][] subPixels = new int[4][4][4];
+        ArrayList<int[]> pair = new ArrayList<int[]>();
 
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        subPixels[i][j] = pixels[y + i - 1][x + j - 1];
-                    }
-                }
-
-                int[][] result = interpolatePixels(subPixels, true);
-
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        newPixels[y * scale + i][x * scale + j] = result[i][j];
-                    }
-                }
+        for (int y = 1; y < (height / 2) * 2 - 2; y += 2) {
+            for (int x = 1; x < (width / 2) * 2 - 2; x += 2) {
+                pair.add(new int[]{y, x});
             }
         }
+
+        pair.parallelStream().forEach(pos -> {
+            int y = pos[0];
+            int x = pos[1];
+            int[][][] subPixels = new int[4][4][4];
+
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    subPixels[i][j] = pixels[y + i - 1][x + j - 1];
+                }
+            }
+
+            int[][] result = interpolatePixels(subPixels, true);
+
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    newPixels[y * scale + i][x * scale + j] = result[i][j];
+                }
+            }
+        });
 
         BufferedImage resultImage = new BufferedImage(newWidth, newHeight, TYPE_INT_ARGB);
 
@@ -293,8 +301,8 @@ public class ImageScaling {
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                int val = (int) interpolater.interpolate(i / 3d, j / 3d);
-                result[i][j] = val < 0 ? 0 : Math.min(val, 255);
+                result[i][j] = (int) interpolater.interpolate(i / 3d, j / 3d);
+//                result[i][j] = val < 0 ? 0 : Math.min(val, 255);
             }
         }
 
