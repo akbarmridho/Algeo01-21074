@@ -32,8 +32,8 @@ public class ImageScaling {
 
         // interpolasi edge pixel teratas dan terbawah (handle case pixel genap)
         // bila jumlah pixel ganjil, pixel pada posisi ganjil terakhir belum diinterpolasi
-        for (int y : new int[]{0, height / 2}) {
-            for (int x = 0; x <= width / 2; x += 2) {
+        for (int y : new int[]{0, height - 2}) {
+            for (int x = 0; x <= width - 2; x+=2) {
                 int[][][] subPixels = new int[2][2][4];
 
                 for (int i = 0; i < 2; i++) {
@@ -54,8 +54,8 @@ public class ImageScaling {
 
         // interpolasi edge pixel paling kiri dan kanan (handle case pixel genap)
         // bila jumlah pixel ganjil, pixel pada posisi ganjil terakhir belum diinterpolasi
-        for (int y = 1; y < height / 2; y += 2) {
-            for (int x : new int[]{0, width / 2}) {
+        for (int y = 1; y < (height / 2) * 2 - 1; y+=2) {
+            for (int x : new int[]{0, (width / 2) * 2 - 2}) {
                 int[][][] subPixels = new int[2][2][4];
 
                 for (int i = 0; i < 2; i++) {
@@ -76,7 +76,7 @@ public class ImageScaling {
 
         // handle jika terdapat lebar yang ganjil
         if (width % 2 == 1) {
-            for (int y = 0; y < height / 2; y += 2) {
+            for (int y = 0; y < (height / 2) * 2 - 1; y+=2) {
                 int[][][] subPixels = new int[2][2][4];
 
                 subPixels[0][0] = pixels[y][width - 2];
@@ -96,39 +96,38 @@ public class ImageScaling {
 
         // handle jika terdapat tinggi yang ganjil
         if (height % 2 == 1) {
-            for (int x = 0; x < width / 2; x += 2) {
+            for (int x = 0; x < width - 2; x+=2) {
                 int[][][] subPixels = new int[2][2][4];
 
-                subPixels[0][0] = pixels[height-2][x];
-                subPixels[0][1] = pixels[height-2][x+1];
-                subPixels[1][0] = pixels[height-1][x];
-                subPixels[1][1] = pixels[height-1][x+1];
+                subPixels[0][0] = pixels[height - 2][x];
+                subPixels[0][1] = pixels[height - 2][x + 1];
+                subPixels[1][0] = pixels[height - 1][x];
+                subPixels[1][1] = pixels[height - 1][x + 1];
 
                 int[][] result = interpolateEdgePixels(subPixels, EDGEMODE.BOTTOM);
 
                 for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < 4; j++) {
-                        newPixels[(height-1) * scale + i][x * scale + j] = result[i][j];
+                        newPixels[(height - 1) * scale + i][x * scale + j] = result[i][j];
                     }
                 }
             }
         }
 
         // jika tinggi dan lebar ganjil
-        if (height%2 == 1 && width % 2 == 1)
-        {
+        if (height % 2 == 1 && width % 2 == 1) {
             int[][][] subPixels = new int[2][2][4];
 
-            subPixels[0][0] = pixels[height-2][width-2];
-            subPixels[0][1] = pixels[height-2][width-1];
-            subPixels[1][0] = pixels[height-1][width-2];
-            subPixels[1][1] = pixels[height-1][height-2];
+            subPixels[0][0] = pixels[height - 2][width - 2];
+            subPixels[0][1] = pixels[height - 2][width - 1];
+            subPixels[1][0] = pixels[height - 1][width - 2];
+            subPixels[1][1] = pixels[height - 1][height - 2];
 
             int[][] result = interpolateEdgePixels(subPixels, EDGEMODE.BOTTOMRIGHT);
 
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < 2; j++) {
-                    newPixels[(height-1) * scale + i][(width-1) * scale + j] = result[i][j];
+                    newPixels[(height - 1) * scale + i][(width - 1) * scale + j] = result[i][j];
                 }
             }
         }
@@ -137,8 +136,8 @@ public class ImageScaling {
         // interpolate 2x2 pixels menjadi 4x4 pixels dari 4x4 pixels sekitar
         // menggunakan metode bicubic interpolation
         // from y = 1 and x = 2 to y < height/2 and x < width/2
-        for (int y = 1; y < height / 2; y += 2) {
-            for (int x = 1; x < width / 2; x += 2) {
+        for (int y = 1; y < (height / 2) * 2 - 2; y+=2) {
+            for (int x = 1; x < (width / 2) * 2 - 2; x+=2) {
                 int[][][] subPixels = new int[4][4][4];
 
                 for (int i = 0; i < 4; i++) {
@@ -220,7 +219,7 @@ public class ImageScaling {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 // langsung konversi RGBA ke int
-                convertedResult[i][i] = toRGBA(result[i][j]);
+                convertedResult[i][j] = toRGBA(result[i][j]);
             }
         }
 
@@ -275,7 +274,7 @@ public class ImageScaling {
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < col; j++) {
                 // langsung konversi RGBA ke int
-                convertedResult[i][i] = toRGBA(result[i][j]);
+                convertedResult[i][j] = toRGBA(result[i][j]);
             }
         }
 
