@@ -106,9 +106,20 @@ public class Transformers {
 
     public static Matrix formatParam (MatrixAugmented equation, Integer[] idx) {
         Matrix matrix = equation.getAugmentation();
-        Matrix result = new Matrix(equation.getRowCount(), equation.getOriginal().getColumnCount());
+        Matrix result = new Matrix(equation.getRowCount()+idx.length, equation.getOriginal().getColumnCount());
+        int indexAdd = 0;
         for (int i = 0; i < result.getRowCount(); i++) {
-            result.getMatrix()[i][0] = matrix.getMatrix()[i][0];
+            boolean foundedIdxRow = false;
+            for (int k = 0; k < idx.length; k++) {
+                if (i == idx[k]) {
+                    foundedIdxRow = true;
+                    break;
+                }
+            }
+            if (!foundedIdxRow) {
+                result.getMatrix()[i][0] = matrix.getMatrix()[indexAdd][0];
+                indexAdd++;
+            }
         }
 
         for (int j = 0; j < result.getColumnCount()-1; j++) {
@@ -122,8 +133,19 @@ public class Transformers {
                 }
             }
             if (found) {
+                indexAdd=0;
                 for (int i = 0; i < result.getRowCount(); i++) {
-                    result.getMatrix()[i][j+1] = matrix.getMatrix()[i][foundedIdx];
+                    boolean foundedIdxRow = false;
+                    for (int k = 0; k < idx.length; k++) {
+                        if (i == idx[k]) {
+                            foundedIdxRow = true;
+                            break;
+                        }
+                    }
+                    if (!foundedIdxRow) {
+                        result.getMatrix()[i][j+1] = matrix.getMatrix()[indexAdd][foundedIdx];
+                        indexAdd++;
+                    }
                 }
             } else {
                 for (int i = 0; i < result.getRowCount(); i++) {
