@@ -27,4 +27,17 @@ public class Polynom {
 
         return Gauss.solve(Polynomials).transpose().getMatrix()[0];
     }
+
+
+    public static double predict(double[] constants, double x)
+    {
+        double sum = 0;
+
+        for (int i = 0; i < constants.length; i++)
+        {
+            sum += constants[i] * Math.pow(x, i);
+        }
+
+        return sum;
+    }
 }
