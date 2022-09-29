@@ -53,8 +53,8 @@ public class GaussJordanTest {
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
         try {
-            double[] result1 = Gauss.solve(mat);
-            double[] result2 = GaussJordan.solve(mat);
+            double[] result1 = Gauss.solve(mat).transpose().getMatrix()[0];
+            double[] result2 = GaussJordan.solve(mat).transpose().getMatrix()[0];
 
             assertArrayEquals(expectedResult, result1);
             assertArrayEquals(expectedResult, result2);
@@ -128,8 +128,8 @@ public class GaussJordanTest {
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
         try {
-            double[] result1 = Gauss.solve(mat);
-            double[] result2 = GaussJordan.solve(mat);
+            double[] result1 = Gauss.solve(mat).transpose().getMatrix()[0];
+            double[] result2 = GaussJordan.solve(mat).transpose().getMatrix()[0];
 
             assertArrayEquals(expectedResult, result1);
             assertArrayEquals(expectedResult, result2);

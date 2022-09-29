@@ -25,6 +25,6 @@ public class Polynom {
 
         MatrixAugmented Polynomials = new MatrixAugmented(xPolynomExpansion, yPolynomResult);
 
-        return Gauss.solve(Polynomials);
+        return Gauss.solve(Polynomials).transpose().getMatrix()[0];
     }
 }

@@ -53,7 +53,7 @@ public class MultipleLinear {
     * array yang dikembalikan adalah {B0, B1, B2, ..., Bk}
     * hasil diperoleh dengan melakukan metode eliminasi gauss terhadap SPL normal estimation*/
     public static double[] regCoefficients(MatrixAugmented data) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
-        return Gauss.solve(normalEstSystem(data));
+        return Gauss.solve(normalEstSystem(data)).transpose().getMatrix()[0];
     }
 
     /*prosedur predict mencetak rumus fungsi regresi linear dari data dan mencetak nilai prediksi

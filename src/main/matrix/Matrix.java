@@ -43,6 +43,12 @@ public class Matrix {
         return new Matrix(this.mat);
     }
 
+    public void assign(Matrix other) {
+        this.mat = other.mat;
+        this.col = other.col;
+        this.row = other.row;
+    }
+
     /*
      * Mengembalikan banyaknya baris dalam suatu matriks
      */

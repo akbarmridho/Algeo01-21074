@@ -4,17 +4,18 @@ import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
 import main.matrix.MatrixAugmented;
+import main.matrix.Matrix;
 import main.matrix.errors.NotMatrixSquareException;
 
 public class GaussJordan {
-    public static double[] solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
+    public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
 
         operation(matrix, false);
 
         // buat array hasil
-        return Transformers.fillResultWithZero(matrix.getAugmentation().transpose().getMatrix()[0], removedIdx);
+        return matrix.getAugmentation();
     }
 
     public static void operation(MatrixAugmented matrix, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException {
