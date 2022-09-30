@@ -8,7 +8,7 @@ import main.matrix.MatrixAugmented;
 
 public class testTrans {
     public static void main(String[] args) {
-        double[][] a = {{0,0,1,4,8},
+        double[][] a = {{0,0,5,4,8},
                         {0,0,4,6,6}};
         double[][] b = {{1},
                         {4}};
@@ -20,5 +20,6 @@ public class testTrans {
 
         System.out.println(Arrays.deepToString(equ.getAugmentation().getMatrix()));
         System.out.println(Arrays.deepToString(or));
+        Transformers.printParametric(equ.getAugmentation());
     }
 }

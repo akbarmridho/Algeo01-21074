@@ -4,7 +4,12 @@ import main.SPL.Cramer;
 import main.SPL.Gauss;
 import main.SPL.GaussJordan;
 import main.SPL.Inverse;
+import main.SPL.errors.InfinitySolutionException;
+import main.SPL.errors.NoSolutionException;
+import main.SPL.utils.Transformers;
 import main.matrix.MatrixAugmented;
+import main.matrix.Matrix;
+import main.matrix.errors.NotMatrixSquareException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,17 +19,17 @@ public class Main {
     public static void main(String[] args) {
         boolean isExit = false;
 
-        while (!isExit) {
-            System.out.println("MENU");
-            System.out.println("1. Sistem Persamaan Linear");
-            System.out.println("2. Determinan");
-            System.out.println("3. Matriks balikan");
-            System.out.println("4. Interpolasi Polinom");
-            System.out.println("5. Interpolasi Bicubic");
-            System.out.println("6. Regresi linier berganda");
-            System.out.println("7. Keluar");
-
-            try (Scanner in = new Scanner(System.in)) {
+        try (Scanner in = new Scanner(System.in)) {
+            while (!isExit) {
+                System.out.println("MENU");
+                System.out.println("1. Sistem Persamaan Linear");
+                System.out.println("2. Determinan");
+                System.out.println("3. Matriks balikan");
+                System.out.println("4. Interpolasi Polinom");
+                System.out.println("5. Interpolasi Bicubic");
+                System.out.println("6. Regresi linier berganda");
+                System.out.println("7. Keluar");
+    
                 int choice = in.nextInt();
 
                 switch (choice) {
@@ -53,13 +58,16 @@ public class Main {
                         System.out.println("Pilihan salah!");
                         break;
                 }
+                    
             }
+            
         }
+        
     }
 
     public static void linearEquation(Scanner in) {
         int option = 1;
-        MatrixAugmented matrix;
+        MatrixAugmented matrix = new MatrixAugmented(new double[2][2]);
 
         while (true) {
             System.out.println("1. Metode eliminasi Gauss");
@@ -108,16 +116,44 @@ public class Main {
         switch (option)
         {
             case 1:
-                result = Gauss.solve(matrix);
+                try {
+                    Transformers.printParametric(Gauss.solve(matrix));
+                } catch(NotMatrixSquareException | InfinitySolutionException e) {
+                    System.out.println(e.getMessage());
+                } catch(NoSolutionException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case 2:
-                result = GaussJordan.solve(matrix);
+                try {
+                    Transformers.printParametric(Gauss.solve(matrix));
+                } catch(NotMatrixSquareException | InfinitySolutionException e) {
+                    System.out.println(e.getMessage());
+                } catch(NoSolutionException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case 3:
-                result = Inverse.solve(matrix);
+                try {
+                    result = Inverse.solve(matrix);
+                    double[][] content = {result};
+                    Matrix solution = new Matrix(content);
+                    Transformers.printParametric(solution.transpose());
+                } catch(NotMatrixSquareException | InfinitySolutionException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case 4:
-                result = Cramer.solve(matrix);
+                try {
+                    result = Cramer.solve(matrix);
+                    double[][] content = {result};
+                    Matrix solution = new Matrix(content);
+                    Transformers.printParametric(solution.transpose());
+                } catch(NotMatrixSquareException | InfinitySolutionException e) {
+                    System.out.println(e.getMessage());
+                } catch(NoSolutionException e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             default:
                 result = new double[]{};

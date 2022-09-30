@@ -1,5 +1,6 @@
 package main.SPL.utils;
 
+import main.SPL.errors.InfinitySolutionException;
 import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
 
@@ -154,6 +155,33 @@ public class Transformers {
             }
         }
         return result;
+    }
+
+    public static void printParametric(Matrix solution) {
+        for (int i = 0; i < solution.getRowCount(); i++) {
+            boolean parametricVariable = false;
+            String RHS = "x" + Integer.toString(i+1);
+            String LHS = "";
+            for (int j = 0; j < solution.getColumnCount(); j++) {
+                if (!parametricVariable){
+                    parametricVariable = solution.getMatrix()[i][j]!=0;
+                }
+                if (j == 0){
+                    LHS += Double.toString(solution.getMatrix()[i][j]);
+                }
+                else if (solution.getMatrix()[i][j]!=0) {
+                    LHS += " + " + Double.toString(solution.getMatrix()[i][j]) + "(t" + Integer.toString(j) + ")";
+                }
+            }
+            if (!parametricVariable) {
+                LHS = "(t" + Integer.toString(i+1) + ")";
+            }
+            if (i == solution.getRowCount() - 1) {
+                System.out.print(RHS + " = " + LHS + "\n");
+            } else {
+                System.out.print(RHS + " = " + LHS + ", ");
+            }
+        }
     }
 
 }

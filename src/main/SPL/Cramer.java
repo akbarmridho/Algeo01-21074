@@ -26,6 +26,7 @@ public class Cramer {
         //Operasi Crammer
         for(int i = 0; i < matrix.getOriginal().getColumnCount(); i++) {
             //matrix temporary Dx1, Dx2, Dx3, ..., Dxn
+            matrix = matrixCpy.copy();
             Matrix tempMatrix = matrix.getOriginal();
 
             //Mengubah kolom i dengan sisi kanan dari SPL
