@@ -4,6 +4,7 @@ import main.SPL.GaussJordan;
 import main.SPL.Inverse;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
+import main.SPL.utils.Transformers;
 import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
 import main.matrix.errors.NotMatrixSquareException;
@@ -12,14 +13,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SPLCase {
     public static void main(String[] args) {
-        case1a();
-        case1b();
+//        case1a();
+//        case1b();
         case1c();
-        case1d();
-        case2a();
-        case2b();
-        case3a();
-        case3b();
+//        case1d();
+//        case2a();
+//        case2b();
+//        case3a();
+//        case3b();
     }
 
     public static void case1a() {
@@ -38,16 +39,8 @@ public class SPLCase {
         Matrix matrixB = new Matrix(matrixBContent);
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
-
-        try {
-            GaussJordan.solve(mat);
-        } catch (InfinitySolutionException e) {
-
-        } catch (NotMatrixSquareException e) {
-
-        } catch (NoSolutionException e) {
-
-        }
+        writeEquation(mat);
+        solve(mat);
     }
 
     public static void case1b() {
@@ -67,15 +60,8 @@ public class SPLCase {
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-        try {
-            GaussJordan.solve(mat);
-        } catch (InfinitySolutionException e) {
-
-        } catch (NotMatrixSquareException e) {
-
-        } catch (NoSolutionException e) {
-
-        }
+        writeEquation(mat);
+        solve(mat);
     }
 
     public static void case1c() {
@@ -94,15 +80,8 @@ public class SPLCase {
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-        try {
-            GaussJordan.solve(mat);
-        } catch (InfinitySolutionException e) {
-
-        } catch (NotMatrixSquareException e) {
-
-        } catch (NoSolutionException e) {
-
-        }
+        writeEquation(mat);
+        solve(mat);
     }
 
     public static void case1d() {
@@ -225,6 +204,42 @@ public class SPLCase {
             GaussJordan.solve(mat);
         } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
 
+        }
+    }
+
+    public static void writeEquation(MatrixAugmented mat) {
+        for (int i = 0; i < mat.getRowCount(); i++) {
+            for (int j = 0; j < mat.getOriginal().getColumnCount(); j++) {
+                System.out.print(String.format("%.2f", Math.abs(mat.getOriginal().getMatrix()[i][j])) + "x" + Integer.toString(j + 1));
+
+                if (j < mat.getOriginal().getColumnCount() - 1) {
+                    if (mat.getOriginal().getMatrix()[i][j+1] < 0) {
+                        System.out.print(" - ");
+                    } else {
+                        System.out.print(" + ");
+                    }
+                } else {
+                    System.out.print(" = ");
+                }
+            }
+
+            System.out.print(String.format("%.2f", mat.getAugmentation().getMatrix()[i][0]) + "\n");
+        }
+    }
+
+    public static void solve(MatrixAugmented mat) {
+        try {
+            Integer[] removedIdx = Transformers.removeUnnecesaryVariable(mat);
+
+            Matrix result = GaussJordan.solve(mat);
+            double[] resultFill = Transformers.fillResultWithZero(Transformers.singleColMatToArr(result), removedIdx);
+
+            for (int i = 0; i < result.getRowCount(); i++) {
+                System.out.print("x" + Integer.toString(i + 1) + " = " + String.format("%.2f", resultFill[i]) + "\n");
+            }
+
+        } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
+            System.out.println(e.getMessage());
         }
     }
 
