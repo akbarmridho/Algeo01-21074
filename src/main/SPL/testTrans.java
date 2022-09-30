@@ -8,8 +8,8 @@ import main.matrix.MatrixAugmented;
 
 public class testTrans {
     public static void main(String[] args) {
-        double[][] a = {{0,0,5,4,8},
-                        {0,0,4,6,6}};
+        double[][] a = {{4,1,5,2,8},
+                        {2,3,4,3,6}};
         double[][] b = {{1},
                         {4}};
         Matrix x = new Matrix(a);

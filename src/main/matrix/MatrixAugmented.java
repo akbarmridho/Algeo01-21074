@@ -100,6 +100,21 @@ public class MatrixAugmented {
                 idxs.add(i);
             }
             this.deleteRow(idxs.toArray(new Integer[idxs.size()]));
+        } 
+        else {
+            for (int i = 0; i < this.getRowCount(); i++) {
+                boolean isZeroRow = true;
+                for (int j = 0; j < this.getOriginal().getColumnCount(); j++) {
+                    if (this.getOriginal().getMatrix()[i][j] != 0 | this.getAugmentation().getMatrix()[i][0] != 0) {
+                        isZeroRow = false;
+                        break;
+                    }
+                }
+                if (isZeroRow) {
+                    idxs.add(i);
+                }
+            }
+            this.deleteRow(idxs.toArray(new Integer[idxs.size()]));
         }
     }
 }

@@ -44,7 +44,7 @@ public class Transformers {
         int zeroColumns = maskedIdx.size();
 
         if (equation.getColumnCount() - maskedIdx.size() > matrix.getAugmentation().getRowCount()) {
-            int parametricIndex = 0;
+            int parametricIndex = equation.getColumnCount() - 1;
             int i = 0;
             while (i < (equation.getColumnCount() - zeroColumns - matrix.getAugmentation().getRowCount())) {
                 boolean isZeroColumn = false;
@@ -68,7 +68,7 @@ public class Transformers {
                     Matrix equationRHS = matrix.getAugmentation();
                     equationRHS.assign(parametricRHS);
                 }
-                parametricIndex++;
+                parametricIndex--;
             }
         }
 
@@ -107,7 +107,7 @@ public class Transformers {
 
     public static Matrix formatParam (MatrixAugmented equation, Integer[] idx) {
         Matrix matrix = equation.getAugmentation();
-        Matrix result = new Matrix(equation.getRowCount()+idx.length, equation.getOriginal().getColumnCount());
+        Matrix result = new Matrix(equation.getRowCount()+idx.length, equation.getOriginal().getColumnCount() + 1);
         int indexAdd = 0;
         for (int i = 0; i < result.getRowCount(); i++) {
             boolean foundedIdxRow = false;

@@ -1,5 +1,7 @@
 package main.SPL;
 
+import java.util.Arrays;
+
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
@@ -10,9 +12,11 @@ import main.matrix.errors.NotMatrixSquareException;
 public class Gauss {
     public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
+        operation(matrix, true);
         matrix.trimEquation();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
-        operation(matrix, false);
+        
+        
 
         // selesaikan solusi SPL dari matriks eselon
         for (int i = matrix.getRowCount() - 1; i >= 0; i--) {
@@ -53,34 +57,39 @@ public class Gauss {
 
             // terdapat rare case ketika elemen [i,i] merupakan nol akibat dari pengurangan yang dilakukan pada loop
             // sebelumnya, sehingga kita harus melakukan swapping lagi
-            if (matrix.getOriginal().getMatrix()[i][i] == 0.0)
-            {
-                int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);
-                if (maxRowIdx != -1 && i != maxRowIdx) {
-                    matrix.swapRow(i, maxRowIdx);
-                } else {
-                    // terdapat case juga saat nilai maksimum pada kolom i adalah 0
-                    // mengingat divider tidak boleh nol, akhira kita loop dan swap agar nilai pada kolom [i,i] bernilai
-                    // negatif
+            if (i < matrix.getOriginal().getColumnCount()) {
+                if (matrix.getOriginal().getMatrix()[i][i] == 0.0)
+                {
+                    int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);
+                    if (maxRowIdx != -1 && i != maxRowIdx) {
+                        matrix.swapRow(i, maxRowIdx);
+                    } else if (i != matrix.getRowCount() - 1) {
+                        // terdapat case juga saat nilai maksimum pada kolom i adalah 0
+                        // mengingat divider tidak boleh nol, akhira kita loop dan swap agar nilai pada kolom [i,i] bernilai
+                        // negatif
 
-                    int searchIdx = i+1;
-                    while(matrix.getOriginal().getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount())
-                    {
-                        searchIdx++;
+                        int searchIdx = i+1;
+                        while(matrix.getOriginal().getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount())
+                        {
+                            searchIdx++;
+                        }
+
+                        matrix.swapRow(i, searchIdx);
                     }
-
-                    matrix.swapRow(i, searchIdx);
                 }
-            }
 
-            double divider = matrix.getOriginal().getMatrix()[i][i];
-            matrix.multiplyRow(i, 1d / divider);
+                double divider = matrix.getOriginal().getMatrix()[i][i];
+                if(divider != 0.0){
+                    matrix.multiplyRow(i, 1d / divider);
+                }
 
-            for (int j = i + 1; j < matrix.getRowCount(); j++) {
-                double multiplier = matrix.getOriginal().getMatrix()[j][i];
+                for (int j = i + 1; j < matrix.getRowCount(); j++) {
+                    double multiplier = matrix.getOriginal().getMatrix()[j][i];
 
-                matrix.addRow(j, i, -1d * multiplier);
+                    matrix.addRow(j, i, -1d * multiplier);
+                }
             }
         }
     }
+
 }

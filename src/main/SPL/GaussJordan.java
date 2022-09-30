@@ -10,11 +10,10 @@ import main.matrix.errors.NotMatrixSquareException;
 public class GaussJordan {
     public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
+        operation(matrix, true);
         matrix.trimEquation();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
-
-        operation(matrix, false);
-
+        
         // buat array hasil
         return matrix.getAugmentation();
     }
