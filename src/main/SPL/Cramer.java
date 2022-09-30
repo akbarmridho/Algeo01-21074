@@ -11,6 +11,7 @@ public class Cramer {
     public static double[] solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
         //Index variabel yang tidak terpakai pada SPL
+        matrix.trimEquation();
         double determinant = matrix.getOriginal().getDeterminant();
         
         if (determinant == 0) {

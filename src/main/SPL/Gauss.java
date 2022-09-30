@@ -10,6 +10,7 @@ import main.matrix.errors.NotMatrixSquareException;
 public class Gauss {
     public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
+        matrix.trimEquation();
         Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
         operation(matrix, false);
 

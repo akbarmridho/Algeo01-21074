@@ -1,5 +1,7 @@
 package main.matrix;
 
+import java.util.ArrayList;
+
 public class MatrixAugmented {
     protected Matrix matOriginal;
     protected Matrix matAugmentation;
@@ -84,5 +86,20 @@ public class MatrixAugmented {
     public void multiplyRow(int row, double multipiler) {
         this.matOriginal.multiplyRow(row, multipiler);
         this.matAugmentation.multiplyRow(row, multipiler);
+    }
+
+    public void deleteRow(Integer[] rows) {
+        this.matOriginal.deleteRows(rows);
+        this.matAugmentation.deleteRows(rows);
+    }
+
+    public void trimEquation() {
+        ArrayList<Integer> idxs = new ArrayList<Integer>();
+        if(this.getRowCount() > this.getOriginal().getColumnCount()) {
+            for (int i = this.getOriginal().getColumnCount(); i < this.getRowCount(); i++){
+                idxs.add(i);
+            }
+            this.deleteRow(idxs.toArray(new Integer[idxs.size()]));
+        }
     }
 }
