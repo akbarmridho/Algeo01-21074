@@ -1,5 +1,6 @@
 package main.utils;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -78,4 +79,17 @@ public class Parser {
 
         return output;
     }
+
+    public static void writeFile(ArrayList<String> output, String path) {
+        try {
+            FileWriter writer = new FileWriter(path); 
+            for(String str: output) {
+                writer.write(str);
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }      
+    }
+        
 }

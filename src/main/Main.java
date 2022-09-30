@@ -7,6 +7,7 @@ import main.SPL.Inverse;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
+import main.utils.Parser;
 import main.matrix.MatrixAugmented;
 import main.matrix.Matrix;
 import main.matrix.errors.NotMatrixSquareException;
@@ -112,12 +113,13 @@ public class Main {
         }
 
         double[] result;
+        ArrayList<String> output = new ArrayList<String>();
 
         switch (option)
         {
             case 1:
                 try {
-                    Transformers.printParametric(Gauss.solve(matrix));
+                    output = Transformers.printParametric(Gauss.solve(matrix));
                 } catch(NotMatrixSquareException | InfinitySolutionException e) {
                     System.out.println(e.getMessage());
                 } catch(NoSolutionException e) {
@@ -126,7 +128,7 @@ public class Main {
                 break;
             case 2:
                 try {
-                    Transformers.printParametric(Gauss.solve(matrix));
+                    output = Transformers.printParametric(Gauss.solve(matrix));
                 } catch(NotMatrixSquareException | InfinitySolutionException e) {
                     System.out.println(e.getMessage());
                 } catch(NoSolutionException e) {
@@ -138,7 +140,7 @@ public class Main {
                     result = Inverse.solve(matrix);
                     double[][] content = {result};
                     Matrix solution = new Matrix(content);
-                    Transformers.printParametric(solution.transpose());
+                    output = Transformers.printParametric(solution.transpose());
                 } catch(NotMatrixSquareException | InfinitySolutionException e) {
                     System.out.println(e.getMessage());
                 }
@@ -148,7 +150,7 @@ public class Main {
                     result = Cramer.solve(matrix);
                     double[][] content = {result};
                     Matrix solution = new Matrix(content);
-                    Transformers.printParametric(solution.transpose());
+                    output = Transformers.printParametric(solution.transpose());
                 } catch(NotMatrixSquareException | InfinitySolutionException e) {
                     System.out.println(e.getMessage());
                 } catch(NoSolutionException e) {
@@ -160,7 +162,9 @@ public class Main {
                 break;
         }
 
+        System.out.println("");
         // hasil bisa printout ke terminal atau file???
+        saveToFile(output,System.getProperty("user.dir")+"/src/main/utils/test.txt",in);
     }
 
     public static void determinent(Scanner in) {
@@ -255,5 +259,25 @@ public class Main {
         }
 
         return result;
+    }
+
+    static void saveToFile(ArrayList<String> output, String path, Scanner in){
+        System.out.println("Simpan output pada {" + path + "} ?");
+        System.out.println("Ya (1) : Tidak (0)");
+        
+        int choice = in.nextInt();
+
+        switch(choice) {
+            case 1 :
+                Parser.writeFile(output,path);
+                break;
+            case 0 :
+                System.out.println("file tidak disimpan.");
+                break;
+            default :
+                System.out.println("file tidak disimpan.");
+                break;
+                
+        }
     }
 }

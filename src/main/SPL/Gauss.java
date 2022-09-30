@@ -88,7 +88,8 @@ public class Gauss {
 
                     matrix.addRow(j, i, -1d * multiplier);
                 }
-                System.out.println(Arrays.deepToString(matrix.getOriginal().getMatrix()));
+                //for debug
+                //System.out.println(Arrays.deepToString(matrix.getOriginal().getMatrix()));
             }
         }
     }

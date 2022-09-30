@@ -144,7 +144,7 @@ public class Transformers {
                         }
                     }
                     if (!foundedIdxRow) {
-                        result.getMatrix()[i][j+1] = matrix.getMatrix()[indexAdd][foundedIdx];
+                        result.getMatrix()[i][j+1] = -1d*matrix.getMatrix()[indexAdd][foundedIdx];
                         indexAdd++;
                     }
                 }
@@ -157,7 +157,8 @@ public class Transformers {
         return result;
     }
 
-    public static void printParametric(Matrix solution) {
+    public static ArrayList<String> printParametric(Matrix solution) {
+        ArrayList<String> output = new ArrayList<String>();
         for (int i = 0; i < solution.getRowCount(); i++) {
             boolean parametricVariable = false;
             String RHS = "x" + Integer.toString(i+1);
@@ -178,10 +179,13 @@ public class Transformers {
             }
             if (i == solution.getRowCount() - 1) {
                 System.out.print(RHS + " = " + LHS + "\n");
+                output.add(RHS + " = " + LHS + "\n");
             } else {
                 System.out.print(RHS + " = " + LHS + ", ");
+                output.add(RHS + " = " + LHS + ", ");
             }
         }
+        return output;
     }
 
 }
