@@ -2,6 +2,8 @@ package main.matrix;
 
 import java.util.ArrayList;
 
+import main.SPL.errors.NoSolutionException;
+
 public class MatrixAugmented {
     protected Matrix matOriginal;
     protected Matrix matAugmentation;
@@ -93,7 +95,7 @@ public class MatrixAugmented {
         this.matAugmentation.deleteRows(rows);
     }
 
-    public void trimEquation() {
+    public void trimEquation() throws NoSolutionException {
         ArrayList<Integer> idxs = new ArrayList<Integer>();
         if(this.getRowCount() > this.getOriginal().getColumnCount()) {
             for (int i = this.getOriginal().getColumnCount(); i < this.getRowCount(); i++){
@@ -105,10 +107,13 @@ public class MatrixAugmented {
             for (int i = 0; i < this.getRowCount(); i++) {
                 boolean isZeroRow = true;
                 for (int j = 0; j < this.getOriginal().getColumnCount(); j++) {
-                    if (this.getOriginal().getMatrix()[i][j] != 0 | this.getAugmentation().getMatrix()[i][0] != 0) {
+                    if (this.getOriginal().getMatrix()[i][j] != 0) {
                         isZeroRow = false;
                         break;
                     }
+                }
+                if (isZeroRow && this.getAugmentation().getMatrix()[i][0] != 0) {
+                    throw new NoSolutionException("Tidak terdapat solusi SPL karena LHS 0 menghasilkan RHS tidak 0.");
                 }
                 if (isZeroRow) {
                     idxs.add(i);

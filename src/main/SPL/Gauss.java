@@ -69,7 +69,7 @@ public class Gauss {
                         // negatif
 
                         int searchIdx = i+1;
-                        while(matrix.getOriginal().getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount())
+                        while(matrix.getOriginal().getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount() - 1)
                         {
                             searchIdx++;
                         }
@@ -88,6 +88,7 @@ public class Gauss {
 
                     matrix.addRow(j, i, -1d * multiplier);
                 }
+                System.out.println(Arrays.deepToString(matrix.getOriginal().getMatrix()));
             }
         }
     }
