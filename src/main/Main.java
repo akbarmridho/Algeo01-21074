@@ -116,14 +116,14 @@ public class Main {
         switch (option) {
             case 1:
                 try {
-                    output = Transformers.printParametric(Gauss.solve(matrix, false));
+                    output = Transformers.printParametric(Gauss.solve(matrix));
                 } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
                     output.add(e.getMessage());
                 }
                 break;
             case 2:
                 try {
-                    output = Transformers.printParametric(GaussJordan.solve(matrix, false));
+                    output = Transformers.printParametric(GaussJordan.solve(matrix));
                 } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
                     output.add(e.getMessage());
                 }
@@ -294,7 +294,7 @@ public class Main {
             }
         } else {
             try {
-                Matrix inverse = MatrixAlternative.inverse(matrix, false);
+                Matrix inverse = MatrixAlternative.inverse(matrix);
                 result.addAll(Parser.doubleToArrayOfString(inverse.getMatrix()));
             } catch (ZeroDeterminantException e) {
                 result.add(e.getMessage() + "\n");

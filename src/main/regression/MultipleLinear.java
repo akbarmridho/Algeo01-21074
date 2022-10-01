@@ -49,12 +49,12 @@ public class MultipleLinear {
     public static double[] regCoefficients(MatrixAugmented data) {
         double[] result;
         try {
-            result = Gauss.solve(normalEstSystem(data), true).transpose().getMatrix()[0];
+            result = Gauss.solve(normalEstSystem(data)).transpose().getMatrix()[0];
         } catch (Exception e)
         {
             result = new double[]{0};
             // guarantee to success
-            e.getMessage();
+            e.printStackTrace();
         }
 
         return result;
@@ -76,13 +76,13 @@ public class MultipleLinear {
     public static String buildEquation(double[] bValues) {
         StringBuilder temp = new StringBuilder();
         // mencetak fungsi regresi linear
-        temp.append("f(x) = " + bValues[0]);
+        temp.append("f(x) = ").append(bValues[0]);
         for (int i = 1; i < bValues.length; i++) {
             if (bValues[i] != 0) {     // hanya mencetak apabila koefisien tidak nol
                 if (bValues[i] < 0) {
-                    temp.append(" - " + (-1 * bValues[i]) + "x" + i);
+                    temp.append(" - ").append(-1 * bValues[i]).append("x").append(i);
                 } else {
-                    temp.append(" + " + bValues[i] + "x" + i);
+                    temp.append(" + ").append(bValues[i]).append("x").append(i);
                 }
             }
         }

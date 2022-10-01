@@ -53,9 +53,10 @@ public class Transformers {
             int parametricIndex = equation.getColumnCount() - 1;
 
             int i = 0;
+            int maskedSize = maskedIdx.size();
 
             // banyaknya persamaan yang kurang
-            while (i < (equation.getColumnCount() - maskedIdx.size() - matrix.getAugmentation().getRowCount())) {
+            while (i < (equation.getColumnCount() - maskedSize - matrix.getAugmentation().getRowCount())) {
 
                 boolean isZeroColumn = false;
 
@@ -92,24 +93,6 @@ public class Transformers {
         equation.deleteCols(idxs);
 
         return idxs;
-    }
-
-    public static double[] fillResultWithZero(double[] input, Integer[] idxs) {
-        double[] result = new double[input.length + idxs.length];
-
-        int i = 0;
-
-        for (int j = 0; j < input.length + idxs.length; j++) {
-            int finalI = i;
-            if (Arrays.stream(idxs).anyMatch(x -> x == finalI)) {
-                result[j] = 0;
-            } else {
-                result[i] = input[i];
-                i++;
-            }
-        }
-
-        return result;
     }
 
     // mengubah matrix yang terdiri dari satu kolom menjadi sebuah array satu dimensi

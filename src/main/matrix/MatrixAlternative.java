@@ -7,20 +7,14 @@ public class MatrixAlternative {
     /*
      * Lakukan invers matriks dengan metode gauss-jordan
      */
-    public static Matrix inverse(Matrix matrix, boolean skipDeterminant) throws ZeroDeterminantException {
+    public static Matrix inverse(Matrix matrix) throws ZeroDeterminantException {
         MatrixAugmented matrixPair = new MatrixAugmented(matrix.copy(), Matrix.identity(matrix.getRowCount()));
 
-        if (!skipDeterminant) {
-            if (Math.abs(determinant(matrix)) - Math.pow(2, 23) < 0) {
-                throw new ZeroDeterminantException("Tidak dapat diperoleh invers matrix karena determinan nol");
-            }
+        if (Math.abs(determinant(matrix)) - Math.pow(2, 23) < 0) {
+            throw new ZeroDeterminantException("Tidak dapat diperoleh invers matrix karena determinan nol");
         }
 
-        try {
-            GaussJordan.operation(matrixPair);
-        } catch (Exception e) {
-            // operasi dianggap pasti berhasil
-        }
+        GaussJordan.operation(matrixPair);
 
         return matrixPair.getAugmentation();
     }

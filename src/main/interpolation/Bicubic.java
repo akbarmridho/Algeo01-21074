@@ -34,7 +34,7 @@ class CoefMatrix {
 
         this.original = new Matrix(contents);
         try {
-            this.inverse = MatrixAlternative.inverse(this.original, true);
+            this.inverse = MatrixAlternative.inverse(this.original);
         } catch (Exception e) {
             // pasti berhasil
         }

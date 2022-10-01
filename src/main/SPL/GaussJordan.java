@@ -3,19 +3,12 @@ package main.SPL;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
-import main.matrix.MatrixAlternative;
 import main.matrix.MatrixAugmented;
 import main.matrix.Matrix;
 import main.matrix.errors.NotMatrixSquareException;
 
 public class GaussJordan {
-    public static Matrix solve(MatrixAugmented matrixCpy, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
-//        if (!skipDeterminant && matrixCpy.getRowCount() == matrixCpy.getOriginal().getColumnCount() &&
-//                Math.abs(MatrixAlternative.determinant(matrixCpy.getOriginal())) < Math.pow(2, -46)
-//        ) {
-//            throw new NoSolutionException("Tidak terdapat solusi SPL karena determinan sama dengan nol");
-//        }
-
+    public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
         operation(matrix);
         matrix.trimEquation();

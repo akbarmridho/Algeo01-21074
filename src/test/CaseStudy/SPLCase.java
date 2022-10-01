@@ -1,7 +1,6 @@
 package CaseStudy;
 
 import main.SPL.Gauss;
-import main.SPL.GaussJordan;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
@@ -13,22 +12,22 @@ import java.util.ArrayList;
 
 public class SPLCase {
     public static void main(String[] args) {
-//        System.out.println("SPL Case 1a\n");
-//        case1a();
+        System.out.println("SPL Case 1a\n");
+        case1a();
         System.out.println("SPL Case 1b\n");
         case1b();
-//        System.out.println("SPL Case 1c\n");
-//        case1c();
-//        System.out.println("SPL Case 1d\n");
-//        case1d();
-//        System.out.println("SPL Case 2a\n");
-//        case2a();
-//        System.out.println("SPL Case 2b\n");
-//        case2b();
-//        System.out.println("SPL Case 3a\n");
-//        case3a();
-//        System.out.println("SPL Case 3b\n");
-//        case3b();
+        System.out.println("SPL Case 1c\n");
+        case1c();
+        System.out.println("SPL Case 1d\n");
+        case1d();
+        System.out.println("SPL Case 2a\n");
+        case2a();
+        System.out.println("SPL Case 2b\n");
+        case2b();
+        System.out.println("SPL Case 3a\n");
+        case3a();
+        System.out.println("SPL Case 3b\n");
+        case3b();
     }
 
     public static void case1a() {
@@ -54,13 +53,13 @@ public class SPLCase {
     public static void case1b() {
         double[][] matrixAContent = {
                 {1, -1, 0, 0, 1},
-                {-1, 2, 0, -2, -1},
+                {1, 1, 0, -3, 0},
                 {2, -1, 0, 1, -1},
-                {1, 1, 0, -3, 0}
+                {-1, 2, 0, -2, -1}
         };
 
         double[][] matrixBContent = {
-                {3},{-1} , {5}, {6}
+                {3}, {6}, {5}, {-1}
         };
 
         Matrix matrixA = new Matrix(matrixAContent);
@@ -114,11 +113,8 @@ public class SPLCase {
 
             MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-            try {
-                GaussJordan.solve(mat, false);
-            } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
-
-            }
+            writeEquation(mat);
+            solve(mat);
         }
 
     }
@@ -133,11 +129,8 @@ public class SPLCase {
 
         MatrixAugmented mat = new MatrixAugmented(contents);
 
-        try {
-            GaussJordan.solve(mat, false);
-        } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
-
-        }
+        writeEquation(mat);
+        solve(mat);
     }
 
     public static void case2b() {
@@ -152,11 +145,8 @@ public class SPLCase {
 
         MatrixAugmented mat = new MatrixAugmented(contents);
 
-        try {
-            GaussJordan.solve(mat, false);
-        } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
-
-        }
+        writeEquation(mat);
+        solve(mat);
     }
 
     public static void case3a() {
@@ -176,11 +166,8 @@ public class SPLCase {
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-        try {
-            GaussJordan.solve(mat, false);
-        } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
-
-        }
+        writeEquation(mat);
+        solve(mat);
     }
 
     public static void case3b() {
@@ -208,17 +195,14 @@ public class SPLCase {
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-        try {
-            GaussJordan.solve(mat, false);
-        } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
-
-        }
+        writeEquation(mat);
+        solve(mat);
     }
 
     public static void writeEquation(MatrixAugmented mat) {
         for (int i = 0; i < mat.getRowCount(); i++) {
             for (int j = 0; j < mat.getOriginal().getColumnCount(); j++) {
-                System.out.print(String.format("%.2f", Math.abs(mat.getOriginal().getMatrix()[i][j])) + "x" + Integer.toString(j + 1));
+                System.out.print(String.format("%.2f", Math.abs(mat.getOriginal().getMatrix()[i][j])) + "x" + (j + 1));
 
                 if (j < mat.getOriginal().getColumnCount() - 1) {
                     if (mat.getOriginal().getMatrix()[i][j + 1] < 0) {
@@ -237,7 +221,7 @@ public class SPLCase {
 
     public static void solve(MatrixAugmented mat) {
         try {
-            ArrayList<String> output = Transformers.printParametric(Gauss.solve(mat, false));
+            ArrayList<String> output = Transformers.printParametric(Gauss.solve(mat));
 
             for (String line : output) {
                 System.out.println(line);

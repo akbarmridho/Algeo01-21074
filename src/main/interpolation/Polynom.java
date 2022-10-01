@@ -30,7 +30,7 @@ public class Polynom {
         double[] result;
 
         try {
-            result = Gauss.solve(Polynomials, true).transpose().getMatrix()[0];
+            result = Gauss.solve(Polynomials).transpose().getMatrix()[0];
         } catch (Exception e) {
             e.printStackTrace();
             result = new double[]{0.0};

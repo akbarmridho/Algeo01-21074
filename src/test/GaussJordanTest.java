@@ -27,8 +27,8 @@ public class GaussJordanTest {
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-        assertThrows(NoSolutionException.class, () -> Gauss.solve(mat, false));
-        assertThrows(NoSolutionException.class, () -> GaussJordan.solve(mat, false));
+        assertThrows(NoSolutionException.class, () -> Gauss.solve(mat));
+        assertThrows(NoSolutionException.class, () -> GaussJordan.solve(mat));
     }
 
     @Test
@@ -53,8 +53,8 @@ public class GaussJordanTest {
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
         try {
-            double[] result1 = Gauss.solve(mat, false).transpose().getMatrix()[0];
-            double[] result2 = GaussJordan.solve(mat, false).transpose().getMatrix()[0];
+            double[] result1 = Gauss.solve(mat).transpose().getMatrix()[0];
+            double[] result2 = GaussJordan.solve(mat).transpose().getMatrix()[0];
 
             assertArrayEquals(expectedResult, result1);
             assertArrayEquals(expectedResult, result2);
@@ -81,8 +81,8 @@ public class GaussJordanTest {
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-        assertThrows(NoSolutionException.class, () -> Gauss.solve(mat, false));
-        assertThrows(NoSolutionException.class, () -> GaussJordan.solve(mat, false));
+        assertThrows(NoSolutionException.class, () -> Gauss.solve(mat));
+        assertThrows(NoSolutionException.class, () -> GaussJordan.solve(mat));
     }
 
     @Test
@@ -102,8 +102,8 @@ public class GaussJordanTest {
 
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
-        assertThrows(InfinitySolutionException.class, () -> Gauss.solve(mat, false));
-        assertThrows(InfinitySolutionException.class, () -> GaussJordan.solve(mat, false));
+        assertThrows(InfinitySolutionException.class, () -> Gauss.solve(mat));
+        assertThrows(InfinitySolutionException.class, () -> GaussJordan.solve(mat));
     }
 
     @Test
@@ -128,8 +128,8 @@ public class GaussJordanTest {
         MatrixAugmented mat = new MatrixAugmented(matrixA, matrixB);
 
         try {
-            double[] result1 = Gauss.solve(mat, false).transpose().getMatrix()[0];
-            double[] result2 = GaussJordan.solve(mat, false).transpose().getMatrix()[0];
+            double[] result1 = Gauss.solve(mat).transpose().getMatrix()[0];
+            double[] result2 = GaussJordan.solve(mat).transpose().getMatrix()[0];
 
             assertArrayEquals(expectedResult, result1);
             assertArrayEquals(expectedResult, result2);

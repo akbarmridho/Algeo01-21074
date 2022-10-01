@@ -4,9 +4,6 @@ import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
 import main.regression.MultipleLinear;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class MultipleLinearCase {
     public static void main(String[] args) {
         double[][] xi = {
@@ -86,7 +83,7 @@ public class MultipleLinearCase {
             }
 
             resultString.append(" = ").append(result);
-            System.out.println(resultString.toString());
+            System.out.println(resultString);
         } catch (Exception e)
         {
             e.printStackTrace();
