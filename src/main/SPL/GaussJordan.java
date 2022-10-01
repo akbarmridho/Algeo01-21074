@@ -10,11 +10,11 @@ import main.matrix.errors.NotMatrixSquareException;
 
 public class GaussJordan {
     public static Matrix solve(MatrixAugmented matrixCpy, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
-        if (!skipDeterminant && matrixCpy.getRowCount() == matrixCpy.getOriginal().getColumnCount() &&
-                Math.abs(MatrixAlternative.determinant(matrixCpy.getOriginal())) < Math.pow(2, -46)
-        ) {
-            throw new NoSolutionException("Tidak terdapat solusi SPL karena determinan sama dengan nol");
-        }
+//        if (!skipDeterminant && matrixCpy.getRowCount() == matrixCpy.getOriginal().getColumnCount() &&
+//                Math.abs(MatrixAlternative.determinant(matrixCpy.getOriginal())) < Math.pow(2, -46)
+//        ) {
+//            throw new NoSolutionException("Tidak terdapat solusi SPL karena determinan sama dengan nol");
+//        }
 
         MatrixAugmented matrix = matrixCpy.copy();
         operation(matrix);

@@ -35,7 +35,7 @@ public class MatrixAlternative {
 
         // Sort matrix agar kolom ke-n pada baris ke-n merupakan nilai terbesar di antara kolom ke-n pada semua baris
         for (int i = 0; i < matrix.getColumnCount(); i++) {
-            int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);
+            int maxRowIdx = matrix.getColAbsMaxIndex(i, i, matrix.getRowCount() - 1);
             if (maxRowIdx != -1 && i != maxRowIdx) {
                 matrix.swapRow(i, maxRowIdx);
                 determinantMultiplier *= -1;
@@ -47,7 +47,7 @@ public class MatrixAlternative {
             // Sebelum baris matriksnya dipasangkan, terlebih dahulu bagi barisnya sehingga kolom ke-n pada baris ke-n
             // bernilai 1
             if (matrix.getMatrix()[i][i] == 0.0) {
-                int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);
+                int maxRowIdx = matrix.getColAbsMaxIndex(i, i, matrix.getRowCount() - 1);
                 if (maxRowIdx != -1 && i != maxRowIdx) {
                     matrix.swapRow(i, maxRowIdx);
                 } else {

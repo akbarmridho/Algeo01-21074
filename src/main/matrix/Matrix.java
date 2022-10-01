@@ -484,15 +484,17 @@ public class Matrix {
     /*
      * Cari indeks kolom pada range baris dengan nilai maksimum pada kolom tersebut
      */
-    public int getColMaxIndex(int col, int fromRow, int toRow) {
-        if (toRow <= fromRow) {
+    public int getColAbsMaxIndex(int col, int fromRow, int toRow) {
+        if (toRow == fromRow) {
+            return toRow;
+        } else if (toRow < fromRow) {
             return -1;
         }
 
         int max = fromRow;
 
         for (int i = fromRow + 1; i <= toRow; i++) {
-            if (this.mat[i][col] > this.mat[max][col]) {
+            if (Math.abs(this.mat[i][col]) > Math.abs(this.mat[max][col])) {
                 max = i;
             }
         }

@@ -60,11 +60,11 @@ public class MatrixAugmented {
     }
 
     /*
-     * Mengembalikan indeks dari keberadaan nilai makimal dari suatu baris ke baris tertentu
+     * Mengembalikan indeks dari keberadaan nilai absolute makimal dari suatu baris ke baris tertentu
      * pada suatu kolom (digunakan untuk operasi gauss)
      */
-    public int getColMaxIndex(int col, int fromRow, int toRow) {
-        return this.matOriginal.getColMaxIndex(col, fromRow, toRow);
+    public int getColAbsMaxIndex(int col, int fromRow, int toRow) {
+        return this.matOriginal.getColAbsMaxIndex(col, fromRow, toRow);
     }
 
     /*

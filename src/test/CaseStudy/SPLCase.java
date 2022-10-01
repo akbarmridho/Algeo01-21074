@@ -1,5 +1,6 @@
 package CaseStudy;
 
+import main.SPL.Gauss;
 import main.SPL.GaussJordan;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
@@ -53,13 +54,13 @@ public class SPLCase {
     public static void case1b() {
         double[][] matrixAContent = {
                 {1, -1, 0, 0, 1},
-                {1, 1, 0, -3, 0},
+                {-1, 2, 0, -2, -1},
                 {2, -1, 0, 1, -1},
-                {-1, 2, 0, -2, -1}
+                {1, 1, 0, -3, 0}
         };
 
         double[][] matrixBContent = {
-                {3}, {6}, {5}, {-1}
+                {3},{-1} , {5}, {6}
         };
 
         Matrix matrixA = new Matrix(matrixAContent);
@@ -220,7 +221,7 @@ public class SPLCase {
                 System.out.print(String.format("%.2f", Math.abs(mat.getOriginal().getMatrix()[i][j])) + "x" + Integer.toString(j + 1));
 
                 if (j < mat.getOriginal().getColumnCount() - 1) {
-                    if (mat.getOriginal().getMatrix()[i][j+1] < 0) {
+                    if (mat.getOriginal().getMatrix()[i][j + 1] < 0) {
                         System.out.print(" - ");
                     } else {
                         System.out.print(" + ");
@@ -236,9 +237,9 @@ public class SPLCase {
 
     public static void solve(MatrixAugmented mat) {
         try {
-            ArrayList<String> output = Transformers.printParametric(GaussJordan.solve(mat, false));
+            ArrayList<String> output = Transformers.printParametric(Gauss.solve(mat, false));
 
-            for (String line: output) {
+            for (String line : output) {
                 System.out.println(line);
             }
 
