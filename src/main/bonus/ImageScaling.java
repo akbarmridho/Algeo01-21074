@@ -38,17 +38,13 @@ public class ImageScaling {
                 int[][][] subPixels = new int[2][2][4];
 
                 for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 2; j++) {
-                        subPixels[i][j] = pixels[y + i][x + j];
-                    }
+                    System.arraycopy(pixels[y + i], x, subPixels[i], 0, 2);
                 }
 
                 int[][] result = interpolatePixels(subPixels, false);
 
                 for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        newPixels[y * scale + i][x * scale + j] = result[i][j];
-                    }
+                    System.arraycopy(result[i], 0, newPixels[y * scale + i], x * scale, 4);
                 }
             }
         }
@@ -60,17 +56,13 @@ public class ImageScaling {
                 int[][][] subPixels = new int[2][2][4];
 
                 for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 2; j++) {
-                        subPixels[i][j] = pixels[y + i][x + j];
-                    }
+                    System.arraycopy(pixels[y + i], x, subPixels[i], 0, 2);
                 }
 
                 int[][] result = interpolatePixels(subPixels, false);
 
                 for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        newPixels[y * scale + i][x * scale + j] = result[i][j];
-                    }
+                    System.arraycopy(result[i], 0, newPixels[y * scale + i], x * scale, 4);
                 }
             }
         }
@@ -88,9 +80,7 @@ public class ImageScaling {
                 int[][] result = interpolateEdgePixels(subPixels, EDGEMODE.RIGHT);
 
                 for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < 2; j++) {
-                        newPixels[y * scale + i][(width - 1) * scale + j] = result[i][j];
-                    }
+                    System.arraycopy(result[i], 0, newPixels[y * scale + i], (width - 1) * scale, 2);
                 }
             }
         }
@@ -108,9 +98,7 @@ public class ImageScaling {
                 int[][] result = interpolateEdgePixels(subPixels, EDGEMODE.BOTTOM);
 
                 for (int i = 0; i < 2; i++) {
-                    for (int j = 0; j < 4; j++) {
-                        newPixels[(height - 1) * scale + i][x * scale + j] = result[i][j];
-                    }
+                    System.arraycopy(result[i], 0, newPixels[(height - 1) * scale + i], x * scale, 4);
                 }
             }
         }
@@ -127,16 +115,14 @@ public class ImageScaling {
             int[][] result = interpolateEdgePixels(subPixels, EDGEMODE.BOTTOMRIGHT);
 
             for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 2; j++) {
-                    newPixels[(height - 1) * scale + i][(width - 1) * scale + j] = result[i][j];
-                }
+                System.arraycopy(result[i], 0, newPixels[(height - 1) * scale + i], (width - 1) * scale, 2);
             }
         }
 
         // interpolate 2x2 pixels menjadi 4x4 pixels dari 4x4 pixels sekitar
         // menggunakan metode bicubic interpolation
         // from y = 1 and x = 2 to y < height/2 and x < width/2
-        ArrayList<int[]> pair = new ArrayList<int[]>();
+        ArrayList<int[]> pair = new ArrayList<>();
 
         for (int y = 1; y < (height / 2) * 2 - 2; y += 2) {
             for (int x = 1; x < (width / 2) * 2 - 2; x += 2) {
@@ -150,17 +136,13 @@ public class ImageScaling {
             int[][][] subPixels = new int[4][4][4];
 
             for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    subPixels[i][j] = pixels[y + i - 1][x + j - 1];
-                }
+                System.arraycopy(pixels[y + i - 1], x - 1, subPixels[i], 0, 4);
             }
 
             int[][] result = interpolatePixels(subPixels, true);
 
             for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    newPixels[y * scale + i][x * scale + j] = result[i][j];
-                }
+                System.arraycopy(result[i], 0, newPixels[y * scale + i], x * scale, 4);
             }
         });
 
@@ -169,14 +151,6 @@ public class ImageScaling {
         for (int h = 0; h < newHeight; h++) {
             resultImage.setRGB(0, h, newWidth, 1, newPixels[h], 0, newWidth);
         }
-
-//        resultImage.setRGB(0,
-//                0,
-//                newWidth,
-//                newHeight,
-//                flattenImageAndConvert(newWidth, newHeight, newPixels),
-//                0,
-//                newWidth);
 
         return resultImage;
     }
@@ -361,9 +335,7 @@ public class ImageScaling {
         int[][] result = new int[4][2];
 
         for (int i = 0; i < 4; i++) {
-            for (int j = 1; j < 3; j++) {
-                result[i][j - 1] = shadowResult[i][j];
-            }
+            System.arraycopy(shadowResult[i], 1, result[i], 0, 2);
         }
 
         return result;
@@ -395,9 +367,7 @@ public class ImageScaling {
         int[][] result = new int[2][4];
 
         for (int i = 1; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                result[i - 1][j] = shadowResult[i][j];
-            }
+            System.arraycopy(shadowResult[i], 0, result[i - 1], 0, 4);
         }
 
         return result;
@@ -474,22 +444,5 @@ public class ImageScaling {
      */
     public static int toRGBA(int[] color) {
         return (color[3] << 24) | (color[2] << 16) | (color[1]) << 8 | color[0];
-    }
-
-    /*
-     * Flatten 2d array of rgba and convert rgba (array of int) to int
-     */
-    public static int[] flattenImageAndConvert(int width, int height, int[][] pixels) {
-        int[] result = new int[width * height];
-
-        int count = 0;
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                result[count++] = pixels[y][x];
-            }
-        }
-
-        return result;
     }
 }

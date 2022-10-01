@@ -1,20 +1,33 @@
 package main.matrix;
 
 import main.SPL.GaussJordan;
+import main.matrix.errors.ZeroDeterminantException;
 
 public class MatrixAlternative {
-    public static Matrix inverse(Matrix matrix, boolean skipDeterminant) {
+    /*
+     * Lakukan invers matriks dengan metode gauss-jordan
+     */
+    public static Matrix inverse(Matrix matrix, boolean skipDeterminant) throws ZeroDeterminantException {
         MatrixAugmented matrixPair = new MatrixAugmented(matrix.copy(), Matrix.identity(matrix.getRowCount()));
 
-        try {
-            GaussJordan.operation(matrixPair, skipDeterminant);
-        } catch (Exception e) {
+        if (!skipDeterminant) {
+            if (Math.abs(determinant(matrix)) - Math.pow(2, 23) < 0) {
+                throw new ZeroDeterminantException("Tidak dapat diperoleh invers matrix karena determinan nol");
+            }
+        }
 
+        try {
+            GaussJordan.operation(matrixPair);
+        } catch (Exception e) {
+            // operasi dianggap pasti berhasil
         }
 
         return matrixPair.getAugmentation();
     }
 
+    /*
+     * Lakukan perhitungan determinan dengan OBE dan perkalian diagonal matriks
+     */
     public static double determinant(Matrix matrixCpy) {
         Matrix matrix = matrixCpy.copy();
 

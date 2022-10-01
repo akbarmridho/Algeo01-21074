@@ -6,23 +6,21 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Stream;
 
 public class Parser {
 
     public static ArrayList<String> readFile(String path) {
-        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> output = new ArrayList<>();
         try (Stream<String> stream = Files.lines(Paths.get(path), StandardCharsets.UTF_8)) {
-                stream.forEach(s -> output.add(s+"\n"));
+            stream.forEach(s -> output.add(s + "\n"));
         } catch (IOException e) {
             e.printStackTrace();
         }
         return output;
     }
 
-    public static double[][] listOfStringToDouble(ArrayList<String> contents)
-    { 
+    public static double[][] listOfStringToDouble(ArrayList<String> contents) {
         int row = contents.size();
         int col = 0;
         //
@@ -40,7 +38,7 @@ public class Parser {
         for (int i = 0; i < row; i++) {
             int k = 0;
             for (int j = 0; j < col; j++) {
-                String temp = "";
+                StringBuilder temp = new StringBuilder();
                 boolean endNumber = false;
                 while (!endNumber && k < contents.get(i).length()) {
                     if (contents.get(i).charAt(k) == ' ' || contents.get(i).charAt(k) == '\n') {
@@ -48,48 +46,43 @@ public class Parser {
                         k++;
                     }
                     if (!endNumber) {
-                        temp += contents.get(i).charAt(k);
+                        temp.append(contents.get(i).charAt(k));
                         k++;
                     }
-                    
+
                 }
-                output[i][j] = Double.parseDouble(temp);
+                output[i][j] = Double.parseDouble(temp.toString());
             }
         }
 
         return output;
     }
 
-    public static ArrayList<String> doubleToArrayOfString(double[][] contents)
-    {
-        ArrayList<String> output = new ArrayList<String>();
+    public static ArrayList<String> doubleToArrayOfString(double[][] contents) {
+        ArrayList<String> output = new ArrayList<>();
 
-        for (int i = 0; i < contents.length; i++) {
-            String temp = "";
+        for (double[] content : contents) {
+            StringBuilder temp = new StringBuilder();
             for (int j = 0; j < contents[0].length; j++) {
-                temp += String.valueOf(contents[i][j]);
-                if (j==contents[0].length - 1) {
-                    temp += '\n';
+                temp.append(content[j]);
+                if (j == contents[0].length - 1) {
+                    temp.append('\n');
                 } else {
-                    temp += ' ';
+                    temp.append(' ');
                 }
             }
-            output.add(temp);
+            output.add(temp.toString());
         }
 
         return output;
     }
 
-    public static void writeFile(ArrayList<String> output, String path) {
-        try {
-            FileWriter writer = new FileWriter(path); 
-            for(String str: output) {
-                writer.write(str);
-            }
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }      
+    public static void writeFile(ArrayList<String> output, String path) throws IOException {
+        FileWriter writer = new FileWriter(path);
+        for (String str : output) {
+            writer.write(str);
+        }
+        writer.close();
     }
-        
+
 }

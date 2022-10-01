@@ -1,7 +1,6 @@
 package CaseStudy;
 
 import main.SPL.GaussJordan;
-import main.SPL.Inverse;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
@@ -229,7 +228,7 @@ public class SPLCase {
 
     public static void solve(MatrixAugmented mat) {
         try {
-            Integer[] removedIdx = Transformers.removeUnnecesaryVariable(mat);
+            Integer[] removedIdx = Transformers.transformParametric(mat);
 
             Matrix result = GaussJordan.solve(mat);
             double[] resultFill = Transformers.fillResultWithZero(Transformers.singleColMatToArr(result), removedIdx);

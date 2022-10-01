@@ -1,6 +1,5 @@
 package main.SPL.utils;
 
-import main.SPL.errors.InfinitySolutionException;
 import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
 
@@ -9,12 +8,13 @@ import java.util.Arrays;
 
 public class Transformers {
     /*
-     * Menghilangkan kolom yang rata dengan nol
+     * Menghilangkan kolom yang rata dengan nol, lalu membentuk persamaan parametrik bila diperlukan
      */
-    public static Integer[] removeUnnecesaryVariable(MatrixAugmented matrix) {
-        ArrayList<Integer> maskedIdx = new ArrayList<Integer>();
+    public static Integer[] transformParametric(MatrixAugmented matrix) {
+        ArrayList<Integer> maskedIdx = new ArrayList<>();
         Matrix equation = matrix.getOriginal();
 
+        // cari untuk setiap kolom keberadaan kolom nol
         for (int i = 0; i < equation.getColumnCount(); i++) {
             boolean allZero = true;
 
@@ -25,32 +25,44 @@ public class Transformers {
             }
 
             if (allZero) {
+                // tambahkan id kolom yang dimask
                 maskedIdx.add(i);
 
+                // jika terdapat kolom nol, maka solusi menjadi persamaan parametrik
                 Matrix parametricRHS = new Matrix(matrix.getRowCount(), matrix.getAugmentation().getColumnCount() + 1);
 
                 for (int i1 = 0; i1 < matrix.getRowCount(); i1++) {
                     for (int j1 = 0; j1 < matrix.getAugmentation().getColumnCount(); j1++) {
+                        // salin isi matriks augmentasi bagian kanan
                         parametricRHS.getMatrix()[i1][j1] = matrix.getAugmentation().getMatrix()[i1][j1];
                     }
+                    // assign nol pada kolom paling kanan pada augmentation
                     parametricRHS.getMatrix()[i1][parametricRHS.getColumnCount() - 1] = equation.getMatrix()[i1][i];
                 }
 
+                // ubah matrix augmentation dari satu kolom menjadi beberapa kolom
                 Matrix equationRHS = matrix.getAugmentation();
                 equationRHS.assign(parametricRHS);
             }
         }
 
-        int zeroColumns = maskedIdx.size();
-
+        // jika banyaknya kolom setelah penghapusan masih lebih banyak daripada banyaknya baris
+        // (banyaknya persamaan masih kurang, sehingga menghasilkan persamaan parametrik)
         if (equation.getColumnCount() - maskedIdx.size() > matrix.getAugmentation().getRowCount()) {
+
             int parametricIndex = equation.getColumnCount() - 1;
+
             int i = 0;
-            while (i < (equation.getColumnCount() - zeroColumns - matrix.getAugmentation().getRowCount())) {
+
+            // banyaknya persamaan yang kurang
+            while (i < (equation.getColumnCount() - maskedIdx.size() - matrix.getAugmentation().getRowCount())) {
+
                 boolean isZeroColumn = false;
+
                 for (int  j = 0; !isZeroColumn && j < (maskedIdx.size() - i); j++) {
                     isZeroColumn = (parametricIndex == maskedIdx.get(j));
                 }
+
                 if (!isZeroColumn) {
                     maskedIdx.add(parametricIndex);
                     i++;
@@ -72,7 +84,7 @@ public class Transformers {
             }
         }
 
-        Integer[] idxs = maskedIdx.toArray(new Integer[maskedIdx.size()]);
+        Integer[] idxs = maskedIdx.toArray(new Integer[0]);
 
         Matrix equationRHS = matrix.getAugmentation();
         equationRHS.assign(formatParam(matrix, idxs));
@@ -111,8 +123,8 @@ public class Transformers {
         int indexAdd = 0;
         for (int i = 0; i < result.getRowCount(); i++) {
             boolean foundedIdxRow = false;
-            for (int k = 0; k < idx.length; k++) {
-                if (i == idx[k]) {
+            for (Integer integer : idx) {
+                if (i == integer) {
                     foundedIdxRow = true;
                     break;
                 }
@@ -125,7 +137,7 @@ public class Transformers {
 
         for (int j = 0; j < result.getColumnCount()-1; j++) {
             boolean found = false;
-            Integer foundedIdx = 0;
+            int foundedIdx = 0;
             for (int k = 0; k < idx.length; k++) {
                 if (j == idx[k]) {
                     found = true;
@@ -137,8 +149,8 @@ public class Transformers {
                 indexAdd=0;
                 for (int i = 0; i < result.getRowCount(); i++) {
                     boolean foundedIdxRow = false;
-                    for (int k = 0; k < idx.length; k++) {
-                        if (i == idx[k]) {
+                    for (Integer integer : idx) {
+                        if (i == integer) {
                             foundedIdxRow = true;
                             break;
                         }
@@ -158,24 +170,24 @@ public class Transformers {
     }
 
     public static ArrayList<String> printParametric(Matrix solution) {
-        ArrayList<String> output = new ArrayList<String>();
+        ArrayList<String> output = new ArrayList<>();
         for (int i = 0; i < solution.getRowCount(); i++) {
             boolean parametricVariable = false;
-            String RHS = "x" + Integer.toString(i+1);
-            String LHS = "";
+            String RHS = "x" + (i + 1);
+            StringBuilder LHS = new StringBuilder();
             for (int j = 0; j < solution.getColumnCount(); j++) {
                 if (!parametricVariable){
                     parametricVariable = solution.getMatrix()[i][j]!=0;
                 }
                 if (j == 0){
-                    LHS += Double.toString(solution.getMatrix()[i][j]);
+                    LHS.append(solution.getMatrix()[i][j]);
                 }
                 else if (solution.getMatrix()[i][j]!=0) {
-                    LHS += " + " + Double.toString(solution.getMatrix()[i][j]) + "(t" + Integer.toString(j) + ")";
+                    LHS.append(" + ").append(solution.getMatrix()[i][j]).append("(t").append(j).append(")");
                 }
             }
             if (!parametricVariable) {
-                LHS = "(t" + Integer.toString(i+1) + ")";
+                LHS = new StringBuilder("(t" + (i + 1) + ")");
             }
             if (i == solution.getRowCount() - 1) {
                 System.out.print(RHS + " = " + LHS + "\n");

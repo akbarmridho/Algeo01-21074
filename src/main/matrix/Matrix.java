@@ -43,6 +43,9 @@ public class Matrix {
         return new Matrix(this.mat);
     }
 
+    /*
+     * Ubah konten matriks dari matriks lain tanpa mengubah referensi menuju objek matriks ini
+     */
     public void assign(Matrix other) {
         this.mat = other.mat;
         this.col = other.col;
@@ -497,6 +500,9 @@ public class Matrix {
         return max;
     }
 
+    /*
+     * Buat matriks identitas
+     */
     public static Matrix identity(int size) {
         double[][] contents = new double[size][size];
 

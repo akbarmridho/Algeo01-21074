@@ -1,7 +1,5 @@
 package main.SPL;
 
-import java.util.Arrays;
-
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
@@ -12,9 +10,9 @@ import main.matrix.errors.NotMatrixSquareException;
 public class Gauss {
     public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
-        operation(matrix, true);
+        operation(matrix);
         matrix.trimEquation();
-        Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
+        Transformers.transformParametric(matrix);
         
         
 
@@ -32,16 +30,7 @@ public class Gauss {
     /*
      * lakukan operasi gauss sehingga terbentuk matriks eselon
      */
-    public static void operation(MatrixAugmented matrix, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException {
-        if (!skipDeterminant)
-        {
-            double determinant = matrix.getOriginal().getDeterminant();
-
-            if (determinant == 0) {
-                throw new NoSolutionException("Tidak terdapat solusi SPL karena determinan nol");
-            }
-        }
-
+    public static void operation(MatrixAugmented matrix) {
         // Sort matrix agar kolom ke-n pada baris ke-n merupakan nilai terbesar di antara kolom ke-n pada semua baris
         for (int i = 0; i < matrix.getOriginal().getColumnCount() - 1; i++) {
             int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);

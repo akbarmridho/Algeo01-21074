@@ -1,5 +1,3 @@
-package main.utils;
-
 import java.util.ArrayList;
 
 import main.utils.Parser;

@@ -17,50 +17,56 @@ public class MatrixAugmented {
      * Buat matrix augmented dari array of arraf of double
      * yang menjadi augmentasi adalah kolom paling kanan
      */
-    public MatrixAugmented(double[][] contents)
-    {
-        double[][] original = new double[contents.length][contents[0].length-1];
+    public MatrixAugmented(double[][] contents) {
+        double[][] original = new double[contents.length][contents[0].length - 1];
         double[][] augmentation = new double[contents.length][1];
 
-        for (int i = 0; i < contents.length; i++)
-        {
-            for (int j = 0 ; j < contents[i].length-1; j++)
-            {
-                original[i][j] = contents[i][j];
-            }
+        for (int i = 0; i < contents.length; i++) {
+            if (contents[i].length - 1 >= 0) System.arraycopy(contents[i], 0, original[i], 0, contents[i].length - 1);
 
-            augmentation[i][0] = contents[i][contents[i].length-1];
+            augmentation[i][0] = contents[i][contents[i].length - 1];
         }
 
         this.matOriginal = new Matrix(original);
         this.matAugmentation = new Matrix(augmentation);
     }
 
-    public MatrixAugmented copy()
-    {
+    /*
+     * Buat salinan matriks augmented
+     */
+    public MatrixAugmented copy() {
         return new MatrixAugmented(this.matOriginal.copy(), this.matAugmentation.copy());
     }
 
+    /*
+     * Mengembalikan matriks kiri dari matrix augmented
+     */
     public Matrix getOriginal() {
         return this.matOriginal;
     }
 
+    /*
+     * Mengembalikan matriks kanan dari matrix augmented
+     */
     public Matrix getAugmentation() {
         return this.matAugmentation;
     }
 
+    /*
+     * Mengembalikan banyakna kolom suatu matrix augmented
+     */
     public int getRowCount() {
         return this.matOriginal.getRowCount();
     }
 
-    public int getColCount() {
-        return this.matAugmentation.getColumnCount() + this.matOriginal.getColumnCount();
-    }
-
-    public int getColMaxIndex(int col, int fromRow, int toRow)
-    {
+    /*
+     * Mengembalikan indeks dari keberadaan nilai makimal dari suatu baris ke baris tertentu
+     * pada suatu kolom (digunakan untuk operasi gauss)
+     */
+    public int getColMaxIndex(int col, int fromRow, int toRow) {
         return this.matOriginal.getColMaxIndex(col, fromRow, toRow);
     }
+
     /*
      * Menukar dua baris
      */
@@ -90,36 +96,58 @@ public class MatrixAugmented {
         this.matAugmentation.multiplyRow(row, multipiler);
     }
 
+    /*
+     * Hapus beberapa baris sekaligus
+     * input adalah indeks dari baris yang ingin dihapus
+     */
     public void deleteRow(Integer[] rows) {
         this.matOriginal.deleteRows(rows);
         this.matAugmentation.deleteRows(rows);
     }
 
+    /*
+     * Untuk metode gauss
+     * hapus beberapa kolom apabila:
+     * 1. Banyaknya persamaan melebihi dari banyaknya persamaaan yang dibutuhkan
+     * 2. Banyaknya persamaan sesuai, tetapi terdapat baris yang nilainya semua nol
+     */
     public void trimEquation() throws NoSolutionException {
-        ArrayList<Integer> idxs = new ArrayList<Integer>();
-        if(this.getRowCount() > this.getOriginal().getColumnCount()) {
-            for (int i = this.getOriginal().getColumnCount(); i < this.getRowCount(); i++){
+        ArrayList<Integer> idxs = new ArrayList<>();
+
+        // Jika banyaknya baris lebih banyak daripada banyaknya kolom pada matrix original
+        // pada operasi gauss, ini berarti terdapat lebih banyak persamaan daripada yang dibutuhkan
+        if (this.getRowCount() > this.getOriginal().getColumnCount()) {
+            for (int i = this.getOriginal().getColumnCount(); i < this.getRowCount(); i++) {
                 idxs.add(i);
             }
-            this.deleteRow(idxs.toArray(new Integer[idxs.size()]));
-        } 
-        else {
+
+        } else {
+            // periksa apakah ada baris yang nilainya semua nol
             for (int i = 0; i < this.getRowCount(); i++) {
+
+                // periksa jika baris semua nol
                 boolean isZeroRow = true;
-                for (int j = 0; j < this.getOriginal().getColumnCount(); j++) {
+                for (int j = 0; j < this.getOriginal().getColumnCount() & isZeroRow; j++) {
                     if (this.getOriginal().getMatrix()[i][j] != 0) {
                         isZeroRow = false;
-                        break;
                     }
                 }
+
+                // baris nol tetapi nilai pada augmentation tidak nol
+                // tidak ada solusi
                 if (isZeroRow && this.getAugmentation().getMatrix()[i][0] != 0) {
                     throw new NoSolutionException("Tidak terdapat solusi SPL karena LHS 0 menghasilkan RHS tidak 0.");
                 }
+
+                // jika baris nol, tambahkan ke ids untuk dihapus
                 if (isZeroRow) {
                     idxs.add(i);
                 }
             }
-            this.deleteRow(idxs.toArray(new Integer[idxs.size()]));
+        }
+
+        if (idxs.size() > 0) {
+            this.deleteRow(idxs.toArray(new Integer[0]));
         }
     }
 }

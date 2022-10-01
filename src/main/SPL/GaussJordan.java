@@ -10,16 +10,16 @@ import main.matrix.errors.NotMatrixSquareException;
 public class GaussJordan {
     public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
-        operation(matrix, true);
+        operation(matrix);
         matrix.trimEquation();
-        Integer[] removedIdx = Transformers.removeUnnecesaryVariable(matrix);
+        Transformers.transformParametric(matrix);
         
         // buat array hasil
         return matrix.getAugmentation();
     }
 
-    public static void operation(MatrixAugmented matrix, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException {
-        Gauss.operation(matrix, skipDeterminant);
+    public static void operation(MatrixAugmented matrix) throws NotMatrixSquareException, NoSolutionException {
+        Gauss.operation(matrix);
 
         // lakukan operasi jordan (setelah operasi gauss) untuk membentuk solusi
         for (int i = matrix.getRowCount() - 1; i >= 0; i--) {

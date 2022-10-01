@@ -1,5 +1,3 @@
-package main.SPL;
-
 import java.util.Arrays;
 
 import main.SPL.utils.Transformers;
@@ -16,7 +14,7 @@ public class testTrans {
         Matrix y = new Matrix(b);
         MatrixAugmented equ = new MatrixAugmented(x, y);
 
-        Integer[] or = Transformers.removeUnnecesaryVariable(equ);
+        Integer[] or = Transformers.transformParametric(equ);
 
         System.out.println(Arrays.deepToString(equ.getAugmentation().getMatrix()));
         System.out.println(Arrays.deepToString(or));
