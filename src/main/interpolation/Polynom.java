@@ -30,8 +30,9 @@ public class Polynom {
         double[] result;
 
         try {
-            result = Gauss.solve(Polynomials).transpose().getMatrix()[0];
+            result = Gauss.solve(Polynomials, true).transpose().getMatrix()[0];
         } catch (Exception e) {
+            e.printStackTrace();
             result = new double[]{0.0};
         }
 
@@ -42,12 +43,10 @@ public class Polynom {
     /*
      * Prediksikan nilai polynom berdasarkan nilai konstanta a0 .. an
      */
-    public static double predict(double[] constants, double x)
-    {
+    public static double predict(double[] constants, double x) {
         double sum = 0;
 
-        for (int i = 0; i < constants.length; i++)
-        {
+        for (int i = 0; i < constants.length; i++) {
             sum += constants[i] * Math.pow(x, i);
         }
 
@@ -60,13 +59,18 @@ public class Polynom {
 
         for (int i = 0; i < constants.length; i++) {
             if (i == 0) {
-                temp.append(String.format("%.3f", constants[i]));
-            }  else {
-                temp.append(String.format("%.3f", constants[i])).append("x^").append(i);
-            }
+                if (constants[i] < 0) {
+                    temp.append(" - ");
+                }
+                temp.append(String.format("%.3f", Math.abs(constants[i])));
+            } else {
+                if (constants[i] < 0) {
+                    temp.append(" - ");
+                } else {
+                    temp.append(" + ");
 
-            if (i != constants.length - 1){
-                temp.append(" ");
+                }
+                temp.append(String.format("%.3f", Math.abs(constants[i]))).append("x^").append(i);
             }
         }
 

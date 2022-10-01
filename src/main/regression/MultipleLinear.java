@@ -1,11 +1,8 @@
 package main.regression;
 
 import main.SPL.Gauss;
-import main.SPL.errors.InfinitySolutionException;
-import main.SPL.errors.NoSolutionException;
 import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
-import main.matrix.errors.NotMatrixSquareException;
 
 public class MultipleLinear {
     /* normalEstSystem menyusun MatrixAugmented yang berisi SPL normal estimation for multiple linear regression */
@@ -52,7 +49,7 @@ public class MultipleLinear {
     public static double[] regCoefficients(MatrixAugmented data) {
         double[] result;
         try {
-            result = Gauss.solve(normalEstSystem(data)).transpose().getMatrix()[0];
+            result = Gauss.solve(normalEstSystem(data), true).transpose().getMatrix()[0];
         } catch (Exception e)
         {
             result = new double[]{0};

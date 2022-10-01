@@ -88,7 +88,7 @@ public class Main {
             contents = new double[equationCount][variableCount + 1];
 
             for (int i = 0; i < equationCount; i++) {
-                System.out.println("Masukkan persamaan: (format a1 ... an bi");
+                System.out.println("Masukkan persamaan: (format a1 ... an bi)");
                 for (int j = 0; j < variableCount; j++) {
                     contents[i][j] = in.nextDouble();
                 }
@@ -116,16 +116,16 @@ public class Main {
         switch (option) {
             case 1:
                 try {
-                    output = Transformers.printParametric(Gauss.solve(matrix));
+                    output = Transformers.printParametric(Gauss.solve(matrix, false));
                 } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
-                    System.out.println(e.getMessage());
+                    output.add(e.getMessage());
                 }
                 break;
             case 2:
                 try {
-                    output = Transformers.printParametric(GaussJordan.solve(matrix));
+                    output = Transformers.printParametric(GaussJordan.solve(matrix, false));
                 } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
-                    System.out.println(e.getMessage());
+                    output.add(e.getMessage());
                 }
                 break;
             case 3:
@@ -135,7 +135,7 @@ public class Main {
                     Matrix solution = new Matrix(content);
                     output = Transformers.printParametric(solution.transpose());
                 } catch (NotMatrixSquareException | InfinitySolutionException e) {
-                    System.out.println(e.getMessage());
+                    output.add(e.getMessage());
                 }
                 break;
             case 4:
@@ -145,7 +145,7 @@ public class Main {
                     Matrix solution = new Matrix(content);
                     output = Transformers.printParametric(solution.transpose());
                 } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
-                    System.out.println(e.getMessage());
+                    output.add(e.getMessage());
                 }
                 break;
             default:
@@ -158,7 +158,7 @@ public class Main {
         }
 
         if (outputOption == 1) {
-            saveToFile(output, System.getProperty("user.dir") + "/test/SPL" + System.currentTimeMillis() / 1000 + ".txt");
+            saveToFile(output, "SPL" + System.currentTimeMillis() / 1000 + ".txt");
         }
     }
 
@@ -231,7 +231,7 @@ public class Main {
         outputFile.add(output);
 
         if (outputOption == 1) {
-            saveToFile(outputFile, System.getProperty("user.dir") + "/test/determinant" + System.currentTimeMillis() / 1000 + ".txt");
+            saveToFile(outputFile, "determinant" + System.currentTimeMillis() / 1000 + ".txt");
         }
     }
 
@@ -306,7 +306,7 @@ public class Main {
         }
 
         if (outputOption == 1) {
-            saveToFile(result, System.getProperty("user.dir") + "/test/inverse" + System.currentTimeMillis() / 1000 + ".txt");
+            saveToFile(result, "inverse" + System.currentTimeMillis() / 1000 + ".txt");
         }
     }
 
@@ -359,7 +359,7 @@ public class Main {
         }
 
         if (outputOption == 1) {
-            saveToFile(result, System.getProperty("user.dir") + "/test/polynom" + System.currentTimeMillis() / 1000 + ".txt");
+            saveToFile(result, "polynom" + System.currentTimeMillis() / 1000 + ".txt");
         }
     }
 
@@ -412,7 +412,7 @@ public class Main {
         }
 
         if (outputOption == 1) {
-            saveToFile(result, System.getProperty("user.dir") + "/test/bicubic" + System.currentTimeMillis() / 1000 + ".txt");
+            saveToFile(result, "bicubic" + System.currentTimeMillis() / 1000 + ".txt");
         }
     }
 
@@ -478,8 +478,8 @@ public class Main {
         resultString.append("f(");
 
         for (int i = 0; i < xPredict.length; i++) {
-            if (i!=xPredict.length-1) {
-                resultString.append(String.format("%.3f ,", xPredict[i]));
+            if (i != xPredict.length - 1) {
+                resultString.append(String.format("%.3f, ", xPredict[i]));
             } else {
                 resultString.append(String.format("%.3f)", xPredict[i]));
             }
@@ -493,7 +493,7 @@ public class Main {
         }
 
         if (outputOption == 1) {
-            saveToFile(result, System.getProperty("user.dir") + "/test/multiplelinear" + System.currentTimeMillis() / 1000 + ".txt");
+            saveToFile(result, "multiplelinear" + System.currentTimeMillis() / 1000 + ".txt");
         }
     }
 
@@ -539,36 +539,40 @@ public class Main {
 
     public static ArrayList<String> readFile(Scanner in) {
         ArrayList<String> result = new ArrayList<>();
+        String path;
+        FileReader reader;
+        boolean fileFound = false;
 
-        while (true) {
-            System.out.println("Masukkan path file: (contoh: file.txt)");
-            String path = in.nextLine().replace("\n", "");
-
+        do {
+            System.out.println("Masukkan path file relatif terhadap folder test: (contoh: file.txt)");
+            path = in.nextLine().replace("\n", "");
             try {
-                BufferedReader br = new BufferedReader(new FileReader(path));
+                reader = new FileReader(System.getProperty("user.dir") + File.pathSeparator + "test" + File.pathSeparator + path);
+                fileFound = true;
+
+                BufferedReader br = new BufferedReader(reader);
 
                 String line = br.readLine();
                 while (line != null) {
                     result.add(line);
                     line = br.readLine();
                 }
-
-                break;
             } catch (FileNotFoundException e) {
                 System.out.println("File dengan path " + path + " tidak ditemukan");
             } catch (IOException e) {
                 System.out.println("Unexpected error occur: " + e.getMessage());
                 e.printStackTrace();
             }
-        }
+        } while (!fileFound);
 
         return result;
     }
 
     static void saveToFile(ArrayList<String> output, String path) {
+        String basePath = System.getProperty("user.dir") + File.pathSeparator + "test" + File.pathSeparator;
         try {
             Parser.writeFile(output, path);
-            System.out.println("File berhasil disimpan pada path " + path);
+            System.out.println("File berhasil disimpan pada path " + basePath + path);
         } catch (IOException e) {
             e.printStackTrace();
         }

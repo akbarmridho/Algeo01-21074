@@ -6,9 +6,13 @@ import main.matrix.Matrix;
 
 public class InterpolationCase {
     public static void main(String[] args) {
+        System.out.println("CASE 3A");
         case3a();
+        System.out.println("CASE 3B");
         case3b();
+        System.out.println("CASE 3C");
         case3c();
+        System.out.println("CASE 4");
         case4();
     }
 
@@ -23,15 +27,11 @@ public class InterpolationCase {
                 {0.23, 0.147}
         };
 
-        try {
-            double[] constants = Polynom.solve(points);
+        double[] constants = Polynom.solve(points);
+        System.out.println(Polynom.buildEquation(constants));
 
-            double y1 = Polynom.predict(constants, 0.2);
-            double y2 = Polynom.predict(constants, 0.55);
-            double y3 = Polynom.predict(constants, 0.85);
-            double y4 = Polynom.predict(constants, 1.28);
-        } catch (Exception e) {
-
+        for (double x : new double[]{0.2, 0.55, 0.85, 1.28}) {
+            System.out.printf("f(%.2f) = %f%n", x, Polynom.predict(constants, x));
         }
     }
 
@@ -49,25 +49,23 @@ public class InterpolationCase {
                 {9, 10534}
         };
 
-        try {
-            double[] result = Polynom.solve(points);
+        double[] constants = Polynom.solve(points);
+        System.out.println(Polynom.buildEquation(constants));
 
-            double firstTc = 7 + 16d / 31d;
-            double secondTc = 8 + 10d / 31d;
-            double thirdTc = 9 + 5d / 30d;
-            double fourthTc = 7.548;
-
-            System.out.println((int) Polynom.predict(result, firstTc));
-            System.out.println((int) Polynom.predict(result, secondTc));
-            System.out.println((int) Polynom.predict(result, thirdTc));
-            System.out.println((int) Polynom.predict(result, fourthTc));
-        } catch (Exception e) {
+        for (double x : new double[]{
+                7 + 16d / 31d,
+                8 + 10d / 31d,
+                9 + 5d / 30d,
+                7.548
+        }) {
+            System.out.printf("f(%.2f) = %d%n", x, (int) Polynom.predict(constants, x));
         }
     }
 
     public static void case3c() {
 
         for (int n : new int[]{5, 10}) {
+            System.out.println("Saat n = " + n);
             double step = (2d - 0d) / n;
             double[][] points = new double[n + 1][2];
 
@@ -76,12 +74,12 @@ public class InterpolationCase {
                 points[i][1] = fx(step * i);
             }
 
-            try {
-                double[] result = Polynom.solve(points);
-            } catch (Exception e) {
+            double[] constants = Polynom.solve(points);
+            System.out.println(Polynom.buildEquation(constants));
 
+            for (double x : new double[]{0.2, 0.55, 0.85, 1.28}) {
+                System.out.printf("f(%.2f) = %f%n", x, Polynom.predict(constants, x));
             }
-
         }
 
     }
@@ -100,9 +98,9 @@ public class InterpolationCase {
 
         Bicubic solver = new Bicubic(new Matrix(contents));
 
-        double result1 = solver.interpolate(0, 0);
-        double result2 = solver.interpolate(0.5, 0.5);
-        double result3 = solver.interpolate(0.25, 0.75);
-        double result4 = solver.interpolate(0.1, 0.9);
+        System.out.printf("Hasil prediksi f(%.2f,%.2f) adalah %f\n", 0.0, 0.0, solver.interpolate(0, 0));
+        System.out.printf("Hasil prediksi f(%.2f,%.2f) adalah %f\n", 0.5, 0.5, solver.interpolate(0.5, 0.5));
+        System.out.printf("Hasil prediksi f(%.2f,%.2f) adalah %f\n", 0.25, 0.75, solver.interpolate(0.25, 0.75));
+        System.out.printf("Hasil prediksi f(%.2f,%.2f) adalah %f\n", 0.5, 0.5, solver.interpolate(0.1, 0.9));
     }
 }

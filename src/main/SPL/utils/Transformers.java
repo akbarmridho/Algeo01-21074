@@ -170,7 +170,9 @@ public class Transformers {
     }
 
     public static ArrayList<String> printParametric(Matrix solution) {
+
         ArrayList<String> output = new ArrayList<>();
+
         for (int i = 0; i < solution.getRowCount(); i++) {
             boolean parametricVariable = false;
             String RHS = "x" + (i + 1);
@@ -190,10 +192,8 @@ public class Transformers {
                 LHS = new StringBuilder("(t" + (i + 1) + ")");
             }
             if (i == solution.getRowCount() - 1) {
-                System.out.print(RHS + " = " + LHS + "\n");
                 output.add(RHS + " = " + LHS + "\n");
             } else {
-                System.out.print(RHS + " = " + LHS + ", ");
                 output.add(RHS + " = " + LHS + ", ");
             }
         }

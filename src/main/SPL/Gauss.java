@@ -3,18 +3,22 @@ package main.SPL;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
+import main.matrix.MatrixAlternative;
 import main.matrix.MatrixAugmented;
 import main.matrix.Matrix;
 import main.matrix.errors.NotMatrixSquareException;
 
 public class Gauss {
-    public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
+    public static Matrix solve(MatrixAugmented matrixCpy, boolean skipDeterminant) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
+        if (!skipDeterminant && matrixCpy.getRowCount() == matrixCpy.getOriginal().getColumnCount() &&
+                Math.abs(MatrixAlternative.determinant(matrixCpy.getOriginal())) < Math.pow(2, -46)
+        ) {
+            throw new NoSolutionException("Tidak terdapat solusi SPL karena determinan sama dengan nol");
+        }
+
         MatrixAugmented matrix = matrixCpy.copy();
+
         operation(matrix);
-        matrix.trimEquation();
-        Transformers.transformParametric(matrix);
-        
-        
 
         // selesaikan solusi SPL dari matriks eselon
         for (int i = matrix.getRowCount() - 1; i >= 0; i--) {
@@ -22,6 +26,9 @@ public class Gauss {
                 matrix.addRow(j, i, -1 * matrix.getOriginal().getMatrix()[j][i]);
             }
         }
+
+        matrix.trimEquation();
+        Transformers.transformParametric(matrix);
 
         // buat array hasil
         return matrix.getAugmentation();
@@ -47,8 +54,7 @@ public class Gauss {
             // terdapat rare case ketika elemen [i,i] merupakan nol akibat dari pengurangan yang dilakukan pada loop
             // sebelumnya, sehingga kita harus melakukan swapping lagi
             if (i < matrix.getOriginal().getColumnCount()) {
-                if (matrix.getOriginal().getMatrix()[i][i] == 0.0)
-                {
+                if (matrix.getOriginal().getMatrix()[i][i] == 0.0) {
                     int maxRowIdx = matrix.getColMaxIndex(i, i, matrix.getRowCount() - 1);
                     if (maxRowIdx != -1 && i != maxRowIdx) {
                         matrix.swapRow(i, maxRowIdx);
@@ -57,9 +63,8 @@ public class Gauss {
                         // mengingat divider tidak boleh nol, akhira kita loop dan swap agar nilai pada kolom [i,i] bernilai
                         // negatif
 
-                        int searchIdx = i+1;
-                        while(matrix.getOriginal().getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount() - 1)
-                        {
+                        int searchIdx = i + 1;
+                        while (matrix.getOriginal().getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount() - 1) {
                             searchIdx++;
                         }
 
@@ -68,7 +73,7 @@ public class Gauss {
                 }
 
                 double divider = matrix.getOriginal().getMatrix()[i][i];
-                if(divider != 0.0){
+                if (divider != 0.0) {
                     matrix.multiplyRow(i, 1d / divider);
                 }
 
@@ -77,8 +82,6 @@ public class Gauss {
 
                     matrix.addRow(j, i, -1d * multiplier);
                 }
-                //for debug
-                //System.out.println(Arrays.deepToString(matrix.getOriginal().getMatrix()));
             }
         }
     }

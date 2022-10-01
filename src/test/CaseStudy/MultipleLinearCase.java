@@ -4,6 +4,7 @@ import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
 import main.regression.MultipleLinear;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MultipleLinearCase {
@@ -55,24 +56,40 @@ public class MultipleLinearCase {
         MatrixAugmented data = new MatrixAugmented(new Matrix(xi), new Matrix(yi));
 
         // demonstrasi normalEstSystem
-        MatrixAugmented normal = MultipleLinear.normalEstSystem(data);
-        System.out.println("SPL estimasi normal");
-        for (int i = 0; i < 4; i++) {
-            System.out.println(Arrays.toString(normal.getOriginal().getMatrix()[i]) + " " + Arrays.toString(normal.getAugmentation().getMatrix()[i]));
-        }
+//        MatrixAugmented normal = MultipleLinear.normalEstSystem(data);
+//        System.out.println("SPL estimasi normal");
+//        for (int i = 0; i < 4; i++) {
+//            System.out.println(Arrays.toString(normal.getOriginal().getMatrix()[i]) + " " + Arrays.toString(normal.getAugmentation().getMatrix()[i]));
+//        }
+
+
 
         // demonstrasi pencarian koef regresi
         System.out.println();
         try {
             double[] bVal = MultipleLinear.regCoefficients(data);
-            System.out.println("koefisien regresi: " + Arrays.toString(bVal));
+            System.out.println(MultipleLinear.buildEquation(bVal));
 
             // demonstrasi prediksi regresi
             double[] xVal = {50, 76, 29.3};
-            MultipleLinear.predict(bVal, xVal);
+            double result = MultipleLinear.predict(bVal, xVal);
+
+            StringBuilder resultString = new StringBuilder();
+            resultString.append("f(");
+
+            for (int i = 0; i < xVal.length; i++) {
+                if (i!=xVal.length-1) {
+                    resultString.append(String.format("%.3f0, ", xVal[i]));
+                } else {
+                    resultString.append(String.format("%.3f)", xVal[i]));
+                }
+            }
+
+            resultString.append(" = ").append(result);
+            System.out.println(resultString.toString());
         } catch (Exception e)
         {
-
+            e.printStackTrace();
         }
 
     }
