@@ -7,6 +7,7 @@ import main.SPL.Inverse;
 import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
+import main.bonus.ImageScaling;
 import main.interpolation.Bicubic;
 import main.interpolation.Polynom;
 import main.matrix.MatrixAlternative;
@@ -17,6 +18,8 @@ import main.matrix.MatrixAugmented;
 import main.matrix.Matrix;
 import main.matrix.errors.NotMatrixSquareException;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -34,7 +37,8 @@ public class Main {
                 System.out.println("4. Interpolasi Polinom");
                 System.out.println("5. Interpolasi Bicubic");
                 System.out.println("6. Regresi linier berganda");
-                System.out.println("7. Keluar");
+                System.out.println("7. Pembesaran gambar");
+                System.out.println("8. Keluar");
 
                 int choice = in.nextInt();
 
@@ -45,7 +49,8 @@ public class Main {
                     case 4 -> polynomialInterpolation(in);
                     case 5 -> bicubicInterpolation(in);
                     case 6 -> multipleRegression(in);
-                    case 7 -> isExit = true;
+                    case 7 -> imageScaling(in);
+                    case 8 -> isExit = true;
                     default -> System.out.println("Pilihan salah!");
                 }
 
@@ -497,6 +502,39 @@ public class Main {
         }
     }
 
+    public static void imageScaling(Scanner in) {
+        File imageFile;
+        String path;
+        boolean fileFound = false;
+        String basePath = System.getProperty("user.dir") + File.separator + "test" + File.separator;
+
+        do {
+            System.out.println("Masukkan path file relatif terhadap folder test: (contoh: file.txt)");
+            path = in.nextLine().replace("\n", "");
+            try {
+                if(path.length() == 0) {
+                    continue;
+                }
+                imageFile = new File(basePath + path);
+                fileFound = true;
+
+                BufferedImage image = ImageIO.read(imageFile);
+                System.out.println("Interpolating ...");
+                BufferedImage result = ImageScaling.scale(image);
+                String resultPath = basePath + imageFile.getName().split("\\.")[0] + "result.png";
+                File output = new File(resultPath);
+                ImageIO.write(result, "png", output);
+
+                System.out.println("Hasil pembesaran telah disimpan pada path " + resultPath);
+            } catch (FileNotFoundException e) {
+                System.out.println("File dengan path " + path + " tidak ditemukan");
+            } catch (Exception e) {
+                System.out.println("Unexpected error occur: " + e.getMessage());
+                e.printStackTrace();
+            }
+        } while (!fileFound);
+    }
+
     public static int fileOrInputChoice(Scanner in) {
         int option;
 
@@ -547,7 +585,7 @@ public class Main {
             System.out.println("Masukkan path file relatif terhadap folder test: (contoh: file.txt)");
             path = in.nextLine().replace("\n", "");
             try {
-                reader = new FileReader(System.getProperty("user.dir") + File.pathSeparator + "test" + File.pathSeparator + path);
+                reader = new FileReader(System.getProperty("user.dir") + File.separator + "test" + File.separator + path);
                 fileFound = true;
 
                 BufferedReader br = new BufferedReader(reader);
@@ -569,7 +607,7 @@ public class Main {
     }
 
     static void saveToFile(ArrayList<String> output, String path) {
-        String basePath = System.getProperty("user.dir") + File.pathSeparator + "test" + File.pathSeparator;
+        String basePath = System.getProperty("user.dir") + File.separator + "test" + File.separator;
         try {
             Parser.writeFile(output, path);
             System.out.println("File berhasil disimpan pada path " + basePath + path);

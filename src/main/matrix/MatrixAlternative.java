@@ -27,52 +27,44 @@ public class MatrixAlternative {
 
         double determinantMultiplier = 1;
 
-        // Sort matrix agar kolom ke-n pada baris ke-n merupakan nilai terbesar di antara kolom ke-n pada semua baris
-        for (int i = 0; i < matrix.getColumnCount(); i++) {
-            int maxRowIdx = matrix.getColAbsMaxIndex(i, i, matrix.getRowCount() - 1);
-            if (maxRowIdx != -1 && i != maxRowIdx) {
-                matrix.swapRow(i, maxRowIdx);
-                determinantMultiplier *= -1;
-            }
-        }
+        int i = 0; // pivot row
+        int j = 0; // pivot col
+        int m = matrix.getRowCount(); // row count
+        int n = matrix.getColumnCount(); // col count
 
-        // Untuk baris ke-n, lakukan operasi pada baris sehingga kolom ke-n pada baris lain bernilai nol
-        for (int i = 0; i < matrix.getRowCount(); i++) {
-            // Sebelum baris matriksnya dipasangkan, terlebih dahulu bagi barisnya sehingga kolom ke-n pada baris ke-n
-            // bernilai 1
-            if (matrix.getMatrix()[i][i] == 0.0) {
-                int maxRowIdx = matrix.getColAbsMaxIndex(i, i, matrix.getRowCount() - 1);
-                if (maxRowIdx != -1 && i != maxRowIdx) {
-                    matrix.swapRow(i, maxRowIdx);
-                } else {
-                    // terdapat case juga saat nilai maksimum pada kolom i adalah 0
-                    // mengingat divider tidak boleh nol, akhira kita loop dan swap agar nilai pada kolom [i,i] bernilai
-                    // negatif
+        while (i < m && j < n) {
+            int iMax = matrix.getColAbsMaxIndex(j, i, m - 1);
 
-                    int searchIdx = i + 1;
-                    while (matrix.getMatrix()[searchIdx][i] == 0.0 && searchIdx < matrix.getRowCount()) {
-                        searchIdx++;
-                    }
-
-                    matrix.swapRow(i, searchIdx);
+            if (matrix.getMatrix()[iMax][j] == 0.0) {
+                j++;
+            } else {
+                if (iMax != i) {
+                    matrix.swapRow(i, iMax);
+                    determinantMultiplier *= -1;
                 }
-            }
 
-            double divider = matrix.getMatrix()[i][i];
-            matrix.multiplyRow(i, 1d / divider);
-            determinantMultiplier *= divider;
+                double divider = matrix.getMatrix()[i][j];
+                if (Math.abs(divider) < Math.pow(2, -46)) {
+                    matrix.getMatrix()[i][j] = 0;
+                    j++;
+                } else {
+                    matrix.multiplyRow(i, 1d / divider);
+                    determinantMultiplier *= divider;
 
-            for (int j = i + 1; j < matrix.getRowCount(); j++) {
-                double multiplier = matrix.getMatrix()[j][i];
-
-                matrix.addRow(j, i, -1d * multiplier);
+                    for (int x = i + 1; x < m; x++) {
+                        double multiplier = matrix.getMatrix()[x][j];
+                        matrix.addRow(x, i, (-1) * multiplier);
+                    }
+                    i++;
+                    j++;
+                }
             }
         }
 
         double result = 1;
 
-        for (int i = 0; i < matrix.getRowCount(); i++) {
-            result *= matrix.getMatrix()[i][i];
+        for (int l = 0; l < matrix.getRowCount(); l++) {
+            result *= matrix.getMatrix()[l][l];
         }
 
         return result * determinantMultiplier;
