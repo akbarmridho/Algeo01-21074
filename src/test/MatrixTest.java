@@ -190,7 +190,11 @@ public class MatrixTest {
     @Test
     public void Matrix4x4ZeroDeterminant1() {
         // terdapat baris yang nol
-        double[][] matrixAContent = {{4, 3, 2, 2}, {0, 1, -3, 3}, {0, 0, 0, 0}, {0, 3, 1, 1}};
+        double[][] matrixAContent = {
+                {4, 3, 2, 2},
+                {0, 1, -3, 3},
+                {0, 0, 0, 0},
+                {0, 3, 1, 1}};
         Matrix matrixA = new Matrix(matrixAContent);
         double determinant = 0;
 
@@ -204,7 +208,11 @@ public class MatrixTest {
     @Test
     public void Matrix4x4ZeroDeterminant2() {
         // kolom pertama dan ketiga sama
-        double[][] matrixAContent = {{2, 1, 2, 3}, {6, 7, 6, 9}, {0, 6, 0, 0}, {1, 2, 1, 4}};
+        double[][] matrixAContent = {
+                {2, 1, 2, 3},
+                {6, 7, 6, 9},
+                {0, 6, 0, 0},
+                {1, 2, 1, 4}};
         Matrix matrixA = new Matrix(matrixAContent);
         double determinant = 0;
 
@@ -218,7 +226,11 @@ public class MatrixTest {
     @Test
     public void Matrix4x4ZeroDeterminant3() {
         // baris ketiga merupakan kelipatan baris kedua
-        double[][] matrixAContent = {{1, 2, 3, 4}, {2, 5, 7, 3}, {4, 10, 14, 6}, {3, 4, 2, 7}};
+        double[][] matrixAContent = {
+                {1, 2, 3, 4},
+                {2, 5, 7, 3},
+                {4, 10, 14, 6},
+                {3, 4, 2, 7}};
         Matrix matrixA = new Matrix(matrixAContent);
         double determinant = 0;
 
@@ -248,7 +260,10 @@ public class MatrixTest {
 
     @Test
     public void Matrix3x3ZeroDeterminantInverse() {
-        double[][] matrixContent = {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}};
+        double[][] matrixContent = {
+                {1, 1, 1},
+                {1, 1, 1},
+                {1, 1, 1}};
 
         Matrix matrix = new Matrix(matrixContent);
 
@@ -273,7 +288,10 @@ public class MatrixTest {
 
     @Test
     public void MatrixInverse3x3() {
-        double[][] matrixAContent = {{1, 2, 3}, {0, 1, 4}, {5, 6, 0}};
+        double[][] matrixAContent = {
+                {1, 2, 3},
+                {0, 1, 4},
+                {5, 6, 0}};
         double[][] matrixInverseContent = {{-24, 18, 5}, {20, -15, -4}, {-5, 4, 1}};
 
         Matrix matrixA = new Matrix(matrixAContent);
@@ -289,7 +307,11 @@ public class MatrixTest {
 
     @Test
     public void MatrixInverse4x4() {
-        double[][] matrixAContent = {{1, 1, 1, -1}, {1, 1, -1, 1}, {1, -1, 1, 1}, {-1, 1, 1, 1}};
+        double[][] matrixAContent = {
+                {1, 1, 1, -1},
+                {1, 1, -1, 1},
+                {1, -1, 1, 1},
+                {-1, 1, 1, 1}};
         double[][] matrixInverseContent = {{0.25, 0.25, 0.25, -0.25}, {0.25, 0.25, -0.25, 0.25}, {0.25, -0.25, 0.25, 0.25}, {-0.25, 0.25, 0.25, 0.25}};
 
         Matrix matrixA = new Matrix(matrixAContent);

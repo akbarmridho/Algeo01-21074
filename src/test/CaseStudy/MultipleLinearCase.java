@@ -76,7 +76,7 @@ public class MultipleLinearCase {
 
             for (int i = 0; i < xVal.length; i++) {
                 if (i!=xVal.length-1) {
-                    resultString.append(String.format("%.3f0, ", xVal[i]));
+                    resultString.append(String.format("%.3f, ", xVal[i]));
                 } else {
                     resultString.append(String.format("%.3f)", xVal[i]));
                 }

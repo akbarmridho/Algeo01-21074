@@ -6,7 +6,7 @@ import main.matrix.MatrixAlternative;
 class CoefMatrix {
     private static CoefMatrix instance = null;
 
-    public Matrix original;
+    public final Matrix original;
     public Matrix inverse;
 
     private CoefMatrix() {

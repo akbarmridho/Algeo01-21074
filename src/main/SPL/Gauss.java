@@ -1,14 +1,12 @@
 package main.SPL;
 
-import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
-import main.matrix.MatrixAugmented;
 import main.matrix.Matrix;
-import main.matrix.errors.NotMatrixSquareException;
+import main.matrix.MatrixAugmented;
 
 public class Gauss {
-    public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
+    public static Matrix solve(MatrixAugmented matrixCpy) throws NoSolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
 
         operation(matrix);
@@ -46,7 +44,6 @@ public class Gauss {
                 double divider = matrix.getOriginal().getMatrix()[i][j];
                 if (Math.abs(divider) < Math.pow(2, -46)) {
                     matrix.getOriginal().getMatrix()[i][j] = 0;
-                    j++;
                 } else {
                     matrix.multiplyRow(i, 1d / divider);
 
@@ -55,8 +52,8 @@ public class Gauss {
                         matrix.addRow(x, i, (-1) * multiplier);
                     }
                     i++;
-                    j++;
                 }
+                j++;
             }
         }
     }

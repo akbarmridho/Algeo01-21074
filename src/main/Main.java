@@ -122,14 +122,14 @@ public class Main {
             case 1:
                 try {
                     output = Transformers.printParametric(Gauss.solve(matrix));
-                } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
+                } catch (NoSolutionException e) {
                     output.add(e.getMessage());
                 }
                 break;
             case 2:
                 try {
                     output = Transformers.printParametric(GaussJordan.solve(matrix));
-                } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
+                } catch (NoSolutionException e) {
                     output.add(e.getMessage());
                 }
                 break;
@@ -149,7 +149,7 @@ public class Main {
                     double[][] content = {result};
                     Matrix solution = new Matrix(content);
                     output = Transformers.printParametric(solution.transpose());
-                } catch (NotMatrixSquareException | InfinitySolutionException | NoSolutionException e) {
+                } catch (NotMatrixSquareException | NoSolutionException e) {
                     output.add(e.getMessage());
                 }
                 break;
@@ -461,12 +461,12 @@ public class Main {
                 }
             }
 
-            String[] lastRow = stringList.get(0).replace("\n", "").split("\\s+");
+            String[] lastRow = stringList.get(stringList.size() - 1).replace("\n", "").split("\\s+");
 
             xPredict = new double[lastRow.length];
 
-            for (int i = 0; i < lastRow.length; i++) {
-                xPredict[i] = in.nextDouble();
+            for (int m = 0; m < lastRow.length; m++) {
+                xPredict[m] = Double.parseDouble(lastRow[m]);
             }
         }
 
@@ -609,7 +609,7 @@ public class Main {
     static void saveToFile(ArrayList<String> output, String path) {
         String basePath = System.getProperty("user.dir") + File.separator + "test" + File.separator;
         try {
-            Parser.writeFile(output, path);
+            Parser.writeFile(output, basePath + path);
             System.out.println("File berhasil disimpan pada path " + basePath + path);
         } catch (IOException e) {
             e.printStackTrace();

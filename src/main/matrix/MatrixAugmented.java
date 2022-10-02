@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import main.SPL.errors.NoSolutionException;
 
 public class MatrixAugmented {
-    protected Matrix matOriginal;
-    protected Matrix matAugmentation;
+    protected final Matrix matOriginal;
+    protected final Matrix matAugmentation;
 
     public MatrixAugmented(Matrix original, Matrix augmentation) {
         this.matOriginal = original;

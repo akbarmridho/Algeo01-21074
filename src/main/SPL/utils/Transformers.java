@@ -4,13 +4,12 @@ import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Transformers {
     /*
      * Menghilangkan kolom yang rata dengan nol, lalu membentuk persamaan parametrik bila diperlukan
      */
-    public static Integer[] transformParametric(MatrixAugmented matrix) {
+    public static void transformParametric(MatrixAugmented matrix) {
         ArrayList<Integer> maskedIdx = new ArrayList<>();
         Matrix equation = matrix.getOriginal();
 
@@ -92,7 +91,6 @@ public class Transformers {
         
         equation.deleteCols(idxs);
 
-        return idxs;
     }
 
     // mengubah matrix yang terdiri dari satu kolom menjadi sebuah array satu dimensi

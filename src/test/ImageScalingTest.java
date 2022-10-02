@@ -16,9 +16,6 @@ public class ImageScalingTest {
             BufferedImage result = ImageScaling.scale(image);
             long endTime = System.nanoTime();
 
-//            File original = new File("./test/" + imageFile.getName().split("\\.")[0] + "original.png");
-//            ImageIO.write(image, "png", original);
-
 
             File output = new File("./test/" + imageFile.getName().split("\\.")[0] + "result.png");
             ImageIO.write(result, "png", output);

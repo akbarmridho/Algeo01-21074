@@ -10,7 +10,7 @@ public class MatrixAlternative {
     public static Matrix inverse(Matrix matrix) throws ZeroDeterminantException {
         MatrixAugmented matrixPair = new MatrixAugmented(matrix.copy(), Matrix.identity(matrix.getRowCount()));
 
-        if (Math.abs(determinant(matrix)) - Math.pow(2, 23) < 0) {
+        if (Math.abs(determinant(matrix)) - Math.pow(2, -46) < 0) {
             throw new ZeroDeterminantException("Tidak dapat diperoleh invers matrix karena determinan nol");
         }
 
@@ -46,7 +46,6 @@ public class MatrixAlternative {
                 double divider = matrix.getMatrix()[i][j];
                 if (Math.abs(divider) < Math.pow(2, -46)) {
                     matrix.getMatrix()[i][j] = 0;
-                    j++;
                 } else {
                     matrix.multiplyRow(i, 1d / divider);
                     determinantMultiplier *= divider;
@@ -56,8 +55,8 @@ public class MatrixAlternative {
                         matrix.addRow(x, i, (-1) * multiplier);
                     }
                     i++;
-                    j++;
                 }
+                j++;
             }
         }
 

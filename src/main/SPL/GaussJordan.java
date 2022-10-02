@@ -1,14 +1,12 @@
 package main.SPL;
 
-import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
-import main.matrix.MatrixAugmented;
 import main.matrix.Matrix;
-import main.matrix.errors.NotMatrixSquareException;
+import main.matrix.MatrixAugmented;
 
 public class GaussJordan {
-    public static Matrix solve(MatrixAugmented matrixCpy) throws NotMatrixSquareException, NoSolutionException, InfinitySolutionException {
+    public static Matrix solve(MatrixAugmented matrixCpy) throws NoSolutionException {
         MatrixAugmented matrix = matrixCpy.copy();
         operation(matrix);
         matrix.trimEquation();

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
 
 public class ImageScaling {
-    static int scale = 2;
+    static final int scale = 2;
 
     enum EDGEMODE {
         BOTTOM,

@@ -6,17 +6,17 @@ import main.matrix.Matrix;
 
 public class InterpolationCase {
     public static void main(String[] args) {
-        System.out.println("CASE 3A");
-        case3a();
-        System.out.println("CASE 3B");
-        case3b();
-        System.out.println("CASE 3C");
-        case3c();
-        System.out.println("CASE 4");
-        case4();
+        System.out.println("CASE 4A");
+        case4a();
+        System.out.println("CASE 4B");
+        case4b();
+        System.out.println("CASE 4C");
+        case4c();
+        System.out.println("CASE 4bicubic");
+        case4bicubic();
     }
 
-    public static void case3a() {
+    public static void case4a() {
         double[][] points = {
                 {0.4, 0.043},
                 {0.7, 0.005},
@@ -35,7 +35,7 @@ public class InterpolationCase {
         }
     }
 
-    public static void case3b() {
+    public static void case4b() {
         double[][] points = {
                 {6.567, 12624},
                 {7, 21807},
@@ -62,7 +62,7 @@ public class InterpolationCase {
         }
     }
 
-    public static void case3c() {
+    public static void case4c() {
 
         for (int n : new int[]{5, 10}) {
             System.out.println("Saat n = " + n);
@@ -88,7 +88,7 @@ public class InterpolationCase {
         return (Math.pow(x, 2) * Math.sqrt(x)) / (Math.exp(x) + x);
     }
 
-    public static void case4() {
+    public static void case4bicubic() {
         double[][] contents = {
                 {153, 59, 210, 96},
                 {125, 161, 72, 81},

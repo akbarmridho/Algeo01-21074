@@ -1,12 +1,10 @@
 package CaseStudy;
 
 import main.SPL.Gauss;
-import main.SPL.errors.InfinitySolutionException;
 import main.SPL.errors.NoSolutionException;
 import main.SPL.utils.Transformers;
 import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
-import main.matrix.errors.NotMatrixSquareException;
 
 import java.util.ArrayList;
 
@@ -227,7 +225,7 @@ public class SPLCase {
                 System.out.println(line);
             }
 
-        } catch (InfinitySolutionException | NotMatrixSquareException | NoSolutionException e) {
+        } catch (NoSolutionException e) {
             System.out.println(e.getMessage());
         }
     }
