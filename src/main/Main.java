@@ -506,13 +506,13 @@ public class Main {
         File imageFile;
         String path;
         boolean fileFound = false;
-        String basePath = System.getProperty("user.dir") + File.separator + "test" + File.separator;
+        String basePath = System.getProperty("user.dir") + File.separator;
 
         do {
-            System.out.println("Masukkan path file relatif terhadap folder test: (contoh: file.txt)");
+            System.out.println("Masukkan path file relatif terhadap path " + basePath + ": ");
             path = in.nextLine().replace("\n", "");
             try {
-                if(path.length() == 0) {
+                if (path.length() == 0) {
                     continue;
                 }
                 imageFile = new File(basePath + path);
@@ -580,12 +580,13 @@ public class Main {
         String path;
         FileReader reader;
         boolean fileFound = false;
+        String basePath = System.getProperty("user.dir") + File.separator;
 
         do {
-            System.out.println("Masukkan path file relatif terhadap folder test: (contoh: file.txt)");
+            System.out.println("Masukkan path file relatif terhadap path " + basePath + ": ");
             path = in.nextLine().replace("\n", "");
             try {
-                reader = new FileReader(System.getProperty("user.dir") + File.separator + "test" + File.separator + path);
+                reader = new FileReader(basePath + path);
                 fileFound = true;
 
                 BufferedReader br = new BufferedReader(reader);
@@ -607,7 +608,7 @@ public class Main {
     }
 
     static void saveToFile(ArrayList<String> output, String path) {
-        String basePath = System.getProperty("user.dir") + File.separator + "test" + File.separator;
+        String basePath = System.getProperty("user.dir") + File.separator;
         try {
             Parser.writeFile(output, basePath + path);
             System.out.println("File berhasil disimpan pada path " + basePath + path);

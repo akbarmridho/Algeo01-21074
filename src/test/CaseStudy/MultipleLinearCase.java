@@ -4,6 +4,8 @@ import main.matrix.Matrix;
 import main.matrix.MatrixAugmented;
 import main.regression.MultipleLinear;
 
+import java.util.Arrays;
+
 public class MultipleLinearCase {
     public static void main(String[] args) {
         double[][] xi = {
@@ -53,12 +55,25 @@ public class MultipleLinearCase {
         MatrixAugmented data = new MatrixAugmented(new Matrix(xi), new Matrix(yi));
 
         // demonstrasi normalEstSystem
-//        MatrixAugmented normal = MultipleLinear.normalEstSystem(data);
-//        System.out.println("SPL estimasi normal");
-//        for (int i = 0; i < 4; i++) {
-//            System.out.println(Arrays.toString(normal.getOriginal().getMatrix()[i]) + " " + Arrays.toString(normal.getAugmentation().getMatrix()[i]));
-//        }
+        MatrixAugmented normal = MultipleLinear.normalEstSystem(data);
+        System.out.println("SPL estimasi normal");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (j == 0) {
+                    System.out.printf("%.3f", normal.getOriginal().getMatrix()[i][j]);
+                } else {
+                    if (normal.getOriginal().getMatrix()[i][j] < 0) {
+                        System.out.print(" - ");
+                    } else {
+                        System.out.print(" + ");
+                    }
+                    System.out.printf("%.3fx%d", Math.abs(normal.getOriginal().getMatrix()[i][j]), j);
+                }
 
+            }
+
+            System.out.printf(" = %.3f\n", normal.getAugmentation().getMatrix()[i][0]);
+        }
 
 
         // demonstrasi pencarian koef regresi
@@ -75,7 +90,7 @@ public class MultipleLinearCase {
             resultString.append("f(");
 
             for (int i = 0; i < xVal.length; i++) {
-                if (i!=xVal.length-1) {
+                if (i != xVal.length - 1) {
                     resultString.append(String.format("%.3f, ", xVal[i]));
                 } else {
                     resultString.append(String.format("%.3f)", xVal[i]));
@@ -84,8 +99,7 @@ public class MultipleLinearCase {
 
             resultString.append(" = ").append(result);
             System.out.println(resultString);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
