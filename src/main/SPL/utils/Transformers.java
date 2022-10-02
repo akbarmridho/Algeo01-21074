@@ -9,7 +9,7 @@ public class Transformers {
     /*
      * Menghilangkan kolom yang rata dengan nol, lalu membentuk persamaan parametrik bila diperlukan
      */
-    public static void transformParametric(MatrixAugmented matrix) {
+    public static Integer[] transformParametric(MatrixAugmented matrix) {
         ArrayList<Integer> maskedIdx = new ArrayList<>();
         Matrix equation = matrix.getOriginal();
 
@@ -85,12 +85,10 @@ public class Transformers {
         }
 
         Integer[] idxs = maskedIdx.toArray(new Integer[0]);
-
-        Matrix equationRHS = matrix.getAugmentation();
-        equationRHS.assign(formatParam(matrix, idxs));
         
         equation.deleteCols(idxs);
 
+        return idxs;
     }
 
     // mengubah matrix yang terdiri dari satu kolom menjadi sebuah array satu dimensi
@@ -100,7 +98,7 @@ public class Transformers {
 
     public static Matrix formatParam (MatrixAugmented equation, Integer[] idx) {
         Matrix matrix = equation.getAugmentation();
-        Matrix result = new Matrix(equation.getRowCount()+idx.length, equation.getOriginal().getColumnCount() + 1);
+        Matrix result = new Matrix(equation.getRowCount()+idx.length, equation.getOriginal().getColumnCount() + 1 + idx.length);
         int indexAdd = 0;
         for (int i = 0; i < result.getRowCount(); i++) {
             boolean foundedIdxRow = false;

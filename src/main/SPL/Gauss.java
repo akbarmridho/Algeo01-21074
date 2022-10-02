@@ -11,7 +11,7 @@ public class Gauss {
 
         operation(matrix);
         matrix.trimEquation();
-        Transformers.transformParametric(matrix);
+        Integer[] removedIdx = Transformers.transformParametric(matrix);
 
         // selesaikan solusi SPL dari matriks eselon
         for (int i = matrix.getRowCount() - 1; i >= 0; i--) {
@@ -20,6 +20,8 @@ public class Gauss {
             }
         }
 
+        Matrix equationRHS = matrix.getAugmentation();
+        equationRHS.assign(Transformers.formatParam(matrix, removedIdx));
 
         // buat array hasil
         return matrix.getAugmentation();
