@@ -43,15 +43,15 @@ public class Main {
                 int choice = in.nextInt();
 
                 switch (choice) {
-                    case 1 : linearEquation(in);
-                    case 2 : determinant(in);
-                    case 3 : inverse(in);
-                    case 4 : polynomialInterpolation(in);
-                    case 5 : bicubicInterpolation(in);
-                    case 6 : multipleRegression(in);
-                    case 7 : imageScaling(in);
-                    case 8 : isExit = true;
-                    default : System.out.println("Pilihan salah!");
+                    case 1 -> linearEquation(in);
+                    case 2 -> determinant(in);
+                    case 3 -> inverse(in);
+                    case 4 -> polynomialInterpolation(in);
+                    case 5 -> bicubicInterpolation(in);
+                    case 6 -> multipleRegression(in);
+                    case 7 -> imageScaling(in);
+                    case 8 -> isExit = true;
+                    default -> System.out.println("Pilihan salah!");
                 }
 
             }
