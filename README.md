@@ -21,3 +21,4 @@ Program ini dikembangkan dengan spesifikasi sebagai berikut.
 1. OpenJDK 18
 2. JUnit 5.8.1
 3. Intellij IDEA
+4. VSCode
