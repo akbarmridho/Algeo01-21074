@@ -145,6 +145,11 @@ public class Transformers {
                 }
             }
         }
+
+        for (int i = 0; i < idx.length; i++){
+            result.getMatrix()[idx[i]][idx[i]+1] = 1;
+        }
+
         return result;
     }
 
@@ -158,7 +163,7 @@ public class Transformers {
             StringBuilder LHS = new StringBuilder();
             for (int j = 0; j < solution.getColumnCount(); j++) {
                 if (!parametricVariable){
-                    parametricVariable = solution.getMatrix()[i][j]!=0;
+                    parametricVariable = solution.getMatrix()[i][i+1]==1;
                 }
                 if (j == 0){
                     LHS.append(solution.getMatrix()[i][j]);
@@ -167,8 +172,8 @@ public class Transformers {
                     LHS.append(" + ").append(solution.getMatrix()[i][j]).append("(t").append(j).append(")");
                 }
             }
-            if (!parametricVariable) {
-                LHS = new StringBuilder("(t" + (i + 1) + ")");
+            if (parametricVariable) {
+                LHS = new StringBuilder("(" + "t" + (i + 1) + ")");
             }
             if (i == solution.getRowCount() - 1) {
                 output.add(RHS + " = " + LHS + "\n");
